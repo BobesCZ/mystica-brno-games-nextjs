@@ -53,7 +53,7 @@ export const GameListRecords = ({
 
   return (
     <>
-      <Typography variant="h2" gutterBottom>
+      <Typography variant="h2" gutterBottom mt={4}>
         Verze herní databáze
       </Typography>
 

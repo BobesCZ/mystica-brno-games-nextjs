@@ -10,3 +10,8 @@ export type GameListRecord = {
   status: `${GameListRecordStatus}`;
   gameList: Game[];
 };
+
+export enum CacheTags {
+  ACTIVE_GAMELIST = 'activeGameList',
+  GAMELIST_RECORDS = 'gameListRecords',
+}

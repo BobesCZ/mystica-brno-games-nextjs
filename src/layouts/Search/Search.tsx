@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import { GameList, PageTitle, Pagination, usePagination } from '@/components';
 import { useLocale, useTranslations } from 'next-intl';
 import { Layout } from '../Layout';
-import { Game } from '@/types';
+import { Game, GameListInfo } from '@/types';
 import { FormProvider, useForm } from 'react-hook-form';
 import { CategoryFilters } from './types';
 import { CATEGORY_DEFAULT_VALUES } from './config';
@@ -15,9 +15,10 @@ import { CategoryForm, OrderingSelect } from './components';
 
 type Props = {
   gameList: Game[];
+  gameListInfo: GameListInfo;
 };
 
-export default function Search({ gameList }: Props) {
+export default function Search({ gameList, gameListInfo }: Props) {
   const t = useTranslations();
   const locale = useLocale();
 
@@ -35,7 +36,7 @@ export default function Search({ gameList }: Props) {
   const { currentPageGameList, ...paginationProps } = usePagination({ gameFilteredList, ref });
 
   return (
-    <Layout>
+    <Layout gameListInfo={gameListInfo}>
       <PageTitle i18nKey="search.pageTitle" dense />
       <FormProvider {...methods}>
         <Box component="form" onSubmit={methods.handleSubmit((_, e) => e?.preventDefault())}>

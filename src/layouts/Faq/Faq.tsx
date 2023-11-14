@@ -6,13 +6,18 @@ import { range } from 'lodash-es';
 import { Layout } from '../Layout';
 import { PageTitle } from '@/components';
 import { useTranslations } from 'next-intl';
+import { GameListInfo } from '@/types';
 
-export default function Faq() {
+type Props = {
+  gameListInfo: GameListInfo;
+};
+
+export default function Faq({ gameListInfo }: Props) {
   const t = useTranslations();
   const content = range(8);
 
   return (
-    <Layout>
+    <Layout gameListInfo={gameListInfo}>
       <PageTitle i18nKey="faq.pageTitle" />
 
       <Container maxWidth="md" sx={{ mt: 4, mb: 12 }}>

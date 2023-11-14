@@ -8,14 +8,15 @@ import { PageTitle, GameList, usePagination, Pagination } from '@/components';
 import { NAME_DEFAULT_VALUES } from './config';
 import { NameFilters } from './types';
 import { NameForm } from './components';
-import { Game } from '@/types';
+import { Game, GameListInfo } from '@/types';
 import { Layout } from '../Layout';
 
 type Props = {
   gameList: Game[];
+  gameListInfo: GameListInfo;
 };
 
-export default function Name({ gameList }: Props) {
+export default function Name({ gameList, gameListInfo }: Props) {
   const methods = useForm<NameFilters>({
     defaultValues: NAME_DEFAULT_VALUES,
   });
@@ -26,7 +27,7 @@ export default function Name({ gameList }: Props) {
   const { currentPageGameList, ...paginationProps } = usePagination({ gameFilteredList, ref });
 
   return (
-    <Layout>
+    <Layout gameListInfo={gameListInfo}>
       <PageTitle i18nKey="name.pageTitle" dense />
       <FormProvider {...methods}>
         <Box component="form" onSubmit={methods.handleSubmit((_, e) => e?.preventDefault())}>

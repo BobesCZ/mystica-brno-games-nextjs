@@ -381,6 +381,8 @@
     ]
   },
   "footer": {
-    "goToMystica": "Oficiální seznam her"
+    "goToMystica": "Oficiální seznam her",
+    "gamesCount": "Katalog obsahuje {gamesCount} her.",
+    "recordCreated": "Poslední aktualizace {recordCreated}."
   }
 }

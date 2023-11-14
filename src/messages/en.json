@@ -381,6 +381,8 @@
     ]
   },
   "footer": {
-    "goToMystica": "Official list of games"
+    "goToMystica": "Official list of games",
+    "gamesCount": "Catalog contains {gamesCount} games.",
+    "recordCreated": "Last update {recordCreated}."
   }
 }

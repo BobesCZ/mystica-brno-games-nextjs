@@ -1,7 +1,7 @@
 import Admin from '@/layouts/Admin/Admin';
 import { getActiveGameListRecord, getGameListRecords } from '@/actions';
 
-export default async function DbScan() {
+export default async function AdminPage() {
   const gameListRecords = await getGameListRecords();
   const activeGameListRecord = await getActiveGameListRecord();
 

@@ -1,14 +1,21 @@
-import { Box, Container, Grid, Stack, Typography } from '@mui/material';
+import { Box, Container, Divider, Grid, Stack, Typography, darken } from '@mui/material';
 import { FooterLink } from './components';
 import { useTranslations } from 'next-intl';
 import { Urls } from '@/config';
+import { GameListInfo } from '@/types';
 
-export const AppFooter = () => {
+type Props = {
+  gameListInfo?: GameListInfo;
+};
+
+export const AppFooter = ({ gameListInfo }: Props) => {
   const t = useTranslations();
+  const gamesCount = gameListInfo?.gamesCount;
+  const recordCreated = gameListInfo?.recordCreated;
 
   return (
-    <Box sx={{ backgroundColor: '#292112', py: 5 }}>
-      <Container maxWidth="md">
+    <Box sx={{ backgroundColor: '#292112' }}>
+      <Container maxWidth="md" sx={{ py: 5 }}>
         <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
           <Box mb={2.5}>
             <Typography variant="h3" color="secondary.dark">
@@ -49,6 +56,22 @@ export const AppFooter = () => {
           </Stack>
         </Stack>
       </Container>
+
+      {(gamesCount || recordCreated) && (
+        <>
+          <Divider
+            sx={({ palette }) => ({
+              '&.MuiDivider-root': { borderColor: darken(palette.primary.contrastText, 0.5) },
+            })}
+          />
+
+          <Typography variant="body2" color="secondary.dark" textAlign="center" my={2}>
+            {gamesCount && t('footer.gamesCount', { gamesCount })}
+            {recordCreated &&
+              ' ' + t('footer.recordCreated', { recordCreated: new Date(recordCreated ?? 0).toLocaleDateString() })}
+          </Typography>
+        </>
+      )}
     </Box>
   );
 };

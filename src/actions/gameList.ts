@@ -1,12 +1,13 @@
 'use server';
 
 import { kv } from '@vercel/kv';
-import { GameListRecord } from './types';
+import { CacheTags, GameListRecord } from './types';
 import { GAMELIST_RECORDS_KEY } from './config';
 import { getActiveGameListRecord } from './activeGameListRecord';
 import { Game } from '@/types';
+import { unstable_cache } from 'next/cache';
 
-export const getGameList = async (): Promise<Game[]> => {
+const getGameListPromise = async (): Promise<Game[]> => {
   const activeGameListRecord = await getActiveGameListRecord();
 
   const [_key, results] = await kv.zscan(GAMELIST_RECORDS_KEY, 0, {
@@ -17,3 +18,7 @@ export const getGameList = async (): Promise<Game[]> => {
 
   return gameList;
 };
+
+export const getGameList = unstable_cache(getGameListPromise, ['getGameList'], {
+  tags: [CacheTags.ACTIVE_GAMELIST],
+});
