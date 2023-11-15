@@ -1,18 +1,25 @@
 'use client';
 
-import { Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { useTransition } from 'react';
 import { deleteGameListRecord, setActiveGameListRecord } from '@/actions';
 import { Delete } from '@mui/icons-material';
 import { ButtonAction } from '@/components';
+import { GameListRecord } from '@/actions/types';
 
 type Props = {
   selectedRecordId: number;
   handleSelectRecord: (recordId?: number) => void;
   activeGameListRecord?: number;
+  selectedRecord?: GameListRecord;
 };
 
-export const GameListRecordDetail = ({ selectedRecordId, handleSelectRecord, activeGameListRecord }: Props) => {
+export const GameListRecordDetail = ({
+  selectedRecordId,
+  handleSelectRecord,
+  activeGameListRecord,
+  selectedRecord,
+}: Props) => {
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = async () => {
@@ -22,6 +29,17 @@ export const GameListRecordDetail = ({ selectedRecordId, handleSelectRecord, act
 
   const handleActivate = async () => {
     startTransition(() => setActiveGameListRecord(selectedRecordId));
+  };
+
+  const handleDownload = () => {
+    const content = JSON.stringify(selectedRecord, undefined, 2);
+
+    const link = document.createElement('a');
+    const file = new Blob([content], { type: 'text/plain' });
+    link.href = URL.createObjectURL(file);
+    link.download = 'record.json';
+    link.click();
+    URL.revokeObjectURL(link.href);
   };
 
   return (
@@ -40,6 +58,11 @@ export const GameListRecordDetail = ({ selectedRecordId, handleSelectRecord, act
         >
           Smazat tuto verzi
         </ButtonAction>
+
+        <Button color="primary" variant="outlined" onClick={handleDownload}>
+          Stáhnout JSON
+        </Button>
+
         <ButtonAction
           color="success"
           onClick={handleActivate}

@@ -42,6 +42,7 @@ export default function Admin({ gameListRecords, activeGameListRecord }: Props) 
             selectedRecordId={selectedRecordId}
             handleSelectRecord={handleSelectRecord}
             activeGameListRecord={activeGameListRecord}
+            selectedRecord={selectedRecord}
           />
         )}
         {!!selectedRecord && <BggLoader selectedRecord={selectedRecord} />}
