@@ -3,10 +3,9 @@ import { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 
-// TODO: https://github.com/vercel/next.js/issues/49408
-// export function generateStaticParams() {
-//   return [{ locale: 'cs' }, { locale: 'en' }];
-// }
+export function generateStaticParams() {
+  return [{ locale: 'cs' }, { locale: 'en' }];
+}
 
 export const metadata = {
   title: 'Katalog her | Mystica Brno',
