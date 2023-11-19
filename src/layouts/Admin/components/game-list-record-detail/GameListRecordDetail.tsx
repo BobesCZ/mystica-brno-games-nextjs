@@ -45,7 +45,7 @@ export const GameListRecordDetail = ({
   return (
     <>
       <Typography variant="h2" gutterBottom>
-        Verze: {selectedRecordId}
+        Verze: {selectedRecord?.recordName || ''}
       </Typography>
 
       <Stack direction="row" gap={2} alignItems="center" my={4}>

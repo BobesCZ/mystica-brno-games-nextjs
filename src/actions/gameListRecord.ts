@@ -20,11 +20,12 @@ export const deleteGameListRecords = async () => {
   revalidatePath(Urls.ADMIN);
 };
 
-export const createGameListRecord = async (gameList: Game[]): Promise<{ recordId: number }> => {
+export const createGameListRecord = async (gameList: Game[], recordName: string): Promise<{ recordId: number }> => {
   const recordId = Date.now();
 
   const gameListRecord: GameListRecord = {
     recordId,
+    recordName,
     status: GameListRecordStatus.INCOMPLETED,
     gameList,
   };

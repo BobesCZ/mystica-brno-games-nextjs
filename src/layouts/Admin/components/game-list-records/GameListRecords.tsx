@@ -63,6 +63,7 @@ export const GameListRecords = ({
             <TableRow>
               <TableCell>Id</TableCell>
               <TableCell>Vytvořeno</TableCell>
+              <TableCell>Název</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Počet položek</TableCell>
               <TableCell>Aktivní</TableCell>
@@ -70,7 +71,7 @@ export const GameListRecords = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {gameListRecords?.map(({ recordId, status, gameList }, index) => (
+            {gameListRecords?.map(({ recordId, status, recordName, gameList }, index) => (
               <TableRow
                 key={`${recordId}_${index}`}
                 sx={(theme) => ({
@@ -83,6 +84,9 @@ export const GameListRecords = ({
                 </TableCell>
                 <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
                   {new Date(recordId).toLocaleString()}
+                </TableCell>
+                <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
+                  {recordName}
                 </TableCell>
                 <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
                   {status}

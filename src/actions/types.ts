@@ -7,6 +7,7 @@ export enum GameListRecordStatus {
 
 export type GameListRecord = {
   recordId: number;
+  recordName: string;
   status: `${GameListRecordStatus}`;
   gameList: Game[];
 };

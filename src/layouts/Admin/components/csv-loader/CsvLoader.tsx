@@ -8,11 +8,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from '@mui/material';
 import { getGameFromCsv, mergeNotesToCsvGame } from './utils';
 import { dataCsv } from '@/data';
-import { useTransition } from 'react';
+import { ChangeEvent, useState, useTransition } from 'react';
 import { ButtonAction } from '@/components';
 import { createGameListRecord } from '@/actions';
 
@@ -22,12 +23,13 @@ type Props = {
 
 export const CsvLoader = ({ handleSelectRecord }: Props) => {
   const [isPending, startTransition] = useTransition();
+  const [recordName, setRecordName] = useState('');
 
   const csvGameList = mergeNotesToCsvGame(dataCsv).map(getGameFromCsv);
 
   const handleCreateGameList = async () => {
     startTransition(async () => {
-      const { recordId } = await createGameListRecord(csvGameList);
+      const { recordId } = await createGameListRecord(csvGameList, recordName);
       handleSelectRecord(recordId);
     });
   };
@@ -77,6 +79,21 @@ export const CsvLoader = ({ handleSelectRecord }: Props) => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Typography variant="h3" gutterBottom>
+        Název verze
+      </Typography>
+
+      <Box width="50%">
+        <TextField
+          label="Název verze"
+          value={recordName}
+          fullWidth
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            setRecordName(event.target.value);
+          }}
+        />
+      </Box>
 
       {!!csvGameList.length && (
         <Stack direction="row" gap={2} my={4}>

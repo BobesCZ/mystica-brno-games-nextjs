@@ -5,6 +5,7 @@ import { Layout } from '../Layout';
 import { BggLoader, CsvLoader, GameListRecordDetail, GameListRecords } from './components';
 import { GameListRecord } from '@/actions/types';
 import { useState } from 'react';
+import { Divider } from '@mui/material';
 
 type Props = {
   gameListRecords: GameListRecord[];
@@ -36,6 +37,7 @@ export default function Admin({ gameListRecords, activeGameListRecord }: Props) 
           onShowCreatePage={onShowCreatePage}
           activeGameListRecord={activeGameListRecord}
         />
+        <Divider sx={{ mb: 3 }} />
         {showCreatePage && <CsvLoader handleSelectRecord={handleSelectRecord} />}
         {!!selectedRecordId && (
           <GameListRecordDetail
