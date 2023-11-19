@@ -16,8 +16,9 @@ import { useState, useTransition } from 'react';
 import { ButtonAction } from '@/components';
 import dynamic from 'next/dynamic';
 import { deleteGameListRecords } from '@/actions';
-import { GameListRecord } from '@/actions/types';
-import { Delete } from '@mui/icons-material';
+import { GameListRecord, GameListRecordStatus } from '@/actions/types';
+import { Delete, Done, QueryBuilder } from '@mui/icons-material';
+import { Status } from '@/types';
 
 const ReactJson = dynamic(() => import('react-json-view'), {
   ssr: false,
@@ -50,6 +51,12 @@ export const GameListRecords = ({
   };
 
   const getCellSx = (recordId: number) => ({ fontWeight: activeGameListRecord === recordId ? 'bold' : undefined });
+  const getStatusIcon = (status: `${GameListRecordStatus}`) =>
+    status === GameListRecordStatus.COMPLETED ? (
+      <Done fontSize="small" sx={{ verticalAlign: 'middle' }} />
+    ) : (
+      <QueryBuilder fontSize="small" sx={{ verticalAlign: 'middle' }} />
+    );
 
   return (
     <>
@@ -89,10 +96,10 @@ export const GameListRecords = ({
                   {recordName}
                 </TableCell>
                 <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
-                  {status}
+                  {getStatusIcon(status)} {status}
                 </TableCell>
                 <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
-                  {gameList.length}
+                  {gameList?.filter((game) => game.status === Status.FINISHED).length} / {gameList.length}
                 </TableCell>
                 <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
                   {activeGameListRecord === recordId && 'ANO'}

@@ -1,6 +1,6 @@
 'use server';
 
-import { Game } from '@/types';
+import { Game, Status } from '@/types';
 import { kv } from '@vercel/kv';
 import { revalidatePath, revalidateTag, unstable_cache } from 'next/cache';
 import { CacheTags, GameListRecord, GameListRecordStatus } from './types';
@@ -39,8 +39,12 @@ export const createGameListRecord = async (gameList: Game[], recordName: string)
 };
 
 export const updateGameListRecord = async (record: GameListRecord, gameList: Game[]) => {
+  const isCompleted = !gameList.find(({ status }) => status === Status.NEW);
+  const status = isCompleted ? GameListRecordStatus.COMPLETED : GameListRecordStatus.INCOMPLETED;
+
   const gameListRecord: GameListRecord = {
     ...record,
+    status,
     gameList,
   };
 
