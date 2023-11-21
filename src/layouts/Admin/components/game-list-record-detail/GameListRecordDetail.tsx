@@ -1,9 +1,9 @@
 'use client';
 
-import { Button, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { useTransition } from 'react';
 import { deleteGameListRecord, setActiveGameListRecord } from '@/actions';
-import { Delete } from '@mui/icons-material';
+import { Delete, Download, Visibility } from '@mui/icons-material';
 import { ButtonAction } from '@/components';
 import { GameListRecord } from '@/actions/types';
 
@@ -45,7 +45,10 @@ export const GameListRecordDetail = ({
   return (
     <>
       <Typography variant="h2" gutterBottom>
-        Verze: {selectedRecord?.recordName || ''}
+        Verze: {selectedRecord?.recordName || ''}{' '}
+        <Box component="span" fontWeight="normal">
+          ({new Date(selectedRecordId).toLocaleString()})
+        </Box>
       </Typography>
 
       <Stack direction="row" gap={2} alignItems="center" my={4}>
@@ -59,7 +62,7 @@ export const GameListRecordDetail = ({
           Smazat tuto verzi
         </ButtonAction>
 
-        <Button color="primary" variant="outlined" onClick={handleDownload}>
+        <Button color="primary" variant="outlined" onClick={handleDownload} startIcon={<Download />}>
           Stáhnout JSON
         </Button>
 
@@ -68,6 +71,7 @@ export const GameListRecordDetail = ({
           onClick={handleActivate}
           isPending={isPending}
           disabled={activeGameListRecord === selectedRecordId}
+          startIcon={<Visibility />}
         >
           Označit jako aktivní
         </ButtonAction>

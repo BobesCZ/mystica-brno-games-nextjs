@@ -12,13 +12,12 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { useState, useTransition } from 'react';
-import { ButtonAction } from '@/components';
+import { useState } from 'react';
 import dynamic from 'next/dynamic';
-import { deleteGameListRecords } from '@/actions';
 import { GameListRecord, GameListRecordStatus } from '@/actions/types';
-import { Delete, Done, QueryBuilder } from '@mui/icons-material';
+import { Add, Delete, Done, QueryBuilder, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Status } from '@/types';
+import { ConfirmDeleteModal } from '../confirm-delete-modal';
 
 const ReactJson = dynamic(() => import('react-json-view'), {
   ssr: false,
@@ -39,12 +38,11 @@ export const GameListRecords = ({
   onShowCreatePage,
   activeGameListRecord,
 }: Props) => {
-  const [isPending, startTransition] = useTransition();
   const [showDbScan, setShowDbScan] = useState(false);
 
-  const handleDeleteRecords = async () => {
-    startTransition(() => deleteGameListRecords());
-  };
+  const [isModalOpened, setIsModalOpened] = useState(false);
+  const handleOpenModal = () => setIsModalOpened(true);
+  const handleCloseModal = () => setIsModalOpened(false);
 
   const handleShowDbScan = () => {
     setShowDbScan((prev) => !prev);
@@ -68,12 +66,11 @@ export const GameListRecords = ({
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell>Id</TableCell>
+              <TableCell>Aktivní</TableCell>
               <TableCell>Vytvořeno</TableCell>
               <TableCell>Název</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Počet položek</TableCell>
-              <TableCell>Aktivní</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -87,7 +84,11 @@ export const GameListRecords = ({
                 })}
               >
                 <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
-                  {recordId}
+                  {activeGameListRecord === recordId ? (
+                    <Visibility fontSize="small" />
+                  ) : (
+                    <VisibilityOff fontSize="small" color="disabled" />
+                  )}
                 </TableCell>
                 <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
                   {new Date(recordId).toLocaleString()}
@@ -100,9 +101,6 @@ export const GameListRecords = ({
                 </TableCell>
                 <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
                   {gameList?.filter((game) => game.status === Status.FINISHED).length} / {gameList.length}
-                </TableCell>
-                <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
-                  {activeGameListRecord === recordId && 'ANO'}
                 </TableCell>
                 <TableCell component="td" scope="row">
                   <Stack direction={'row'} gap={1}>
@@ -118,10 +116,10 @@ export const GameListRecords = ({
       </TableContainer>
 
       <Stack direction="row" gap={2} alignItems="center" my={4}>
-        <ButtonAction color="error" onClick={handleDeleteRecords} isPending={isPending} startIcon={<Delete />}>
+        <Button variant="contained" color="error" onClick={handleOpenModal} startIcon={<Delete />}>
           Smazat všechny verze
-        </ButtonAction>
-        <Button color="success" variant="outlined" onClick={onShowCreatePage}>
+        </Button>
+        <Button color="success" variant="outlined" onClick={onShowCreatePage} startIcon={<Add />}>
           Vytvořit novou verzi
         </Button>
         <Button color="primary" variant="outlined" onClick={handleShowDbScan}>
@@ -130,6 +128,8 @@ export const GameListRecords = ({
       </Stack>
 
       {showDbScan && <ReactJson src={gameListRecords} theme="pop" />}
+
+      <ConfirmDeleteModal isModalOpened={isModalOpened} handleCloseModal={handleCloseModal} />
     </>
   );
 };

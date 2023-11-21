@@ -1,21 +1,25 @@
-import {
-  Box,
-  Paper,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Stack, TextField, Typography, styled } from '@mui/material';
 import { getGameFromCsv, mergeNotesToCsvGame } from './utils';
-import { dataCsv } from '@/data';
-import { ChangeEvent, useState, useTransition } from 'react';
+import { ChangeEvent, ChangeEventHandler, useState, useTransition } from 'react';
 import { ButtonAction } from '@/components';
 import { createGameListRecord } from '@/actions';
+import { Upload } from '@mui/icons-material';
+import { Game } from '@/types';
+import { parse } from 'papaparse';
+import { CsvGame } from '@/data';
+import { CsvPreview } from '../csv-preview';
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 
 type Props = {
   handleSelectRecord: (recordId: number) => void;
@@ -24,8 +28,19 @@ type Props = {
 export const CsvLoader = ({ handleSelectRecord }: Props) => {
   const [isPending, startTransition] = useTransition();
   const [recordName, setRecordName] = useState('');
+  const [csvGameList, setCsvGameList] = useState<Game[]>([]);
 
-  const csvGameList = mergeNotesToCsvGame(dataCsv).map(getGameFromCsv);
+  const handleFileUpload: ChangeEventHandler<HTMLInputElement> = async (event) => {
+    const file = event?.target?.files?.[0];
+
+    if (!file) return;
+
+    const data = await file.text();
+    const csv = parse<CsvGame>(data, { header: true }).data;
+    const newCsvGameList = mergeNotesToCsvGame(csv).map(getGameFromCsv);
+
+    setCsvGameList(newCsvGameList);
+  };
 
   const handleCreateGameList = async () => {
     startTransition(async () => {
@@ -35,73 +50,47 @@ export const CsvLoader = ({ handleSelectRecord }: Props) => {
   };
 
   return (
-    <>
-      <Box my={4}>
-        <Typography variant="h2" gutterBottom>
-          CSV Data
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Seznam her z CSV obsahuje {csvGameList?.length || 0} položek.
-        </Typography>
-      </Box>
-
-      <TableContainer component={Paper} elevation={4} sx={{ my: 4, maxHeight: '500px', overflow: 'auto' }}>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell>uid</TableCell>
-              <TableCell>sourceName</TableCell>
-              <TableCell>notes</TableCell>
-              <TableCell>langs</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {csvGameList?.map(({ uid, sourceName, notes, langs }) => (
-              <TableRow key={uid} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="td" scope="row">
-                  {uid}
-                </TableCell>
-                <TableCell component="td" scope="row">
-                  {sourceName}
-                </TableCell>
-                <TableCell component="td" scope="row">
-                  {notes?.map((item) => (
-                    <Typography key={item}>{item}</Typography>
-                  ))}
-                </TableCell>
-                <TableCell component="td" scope="row">
-                  {langs?.map((item) => (
-                    <Typography key={item}>{item}</Typography>
-                  ))}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <Typography variant="h3" gutterBottom>
-        Název verze
+    <Box my={4}>
+      <Typography variant="h2" gutterBottom>
+        Vytvořit novou verzi
       </Typography>
 
-      <Box width="50%">
-        <TextField
-          label="Název verze"
-          value={recordName}
-          fullWidth
-          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            setRecordName(event.target.value);
-          }}
-        />
-      </Box>
+      <Typography variant="h3">Nahrát CSV soubor</Typography>
+
+      <Button component="label" variant="contained" startIcon={<Upload />} sx={{ my: 3 }}>
+        Nahrát
+        <VisuallyHiddenInput type="file" onChange={handleFileUpload} />
+      </Button>
 
       {!!csvGameList.length && (
-        <Stack direction="row" gap={2} my={4}>
-          <ButtonAction color="success" onClick={handleCreateGameList} isPending={isPending}>
-            Uložit verzi do DB
-          </ButtonAction>
-        </Stack>
+        <>
+          <Typography variant="body1" color="text.secondary">
+            Seznam her z CSV obsahuje {csvGameList?.length || 0} položek.
+          </Typography>
+
+          <CsvPreview gameList={csvGameList} />
+
+          <Typography variant="h3" gutterBottom>
+            Název verze
+          </Typography>
+
+          <Box width="50%">
+            <TextField
+              label="Název verze"
+              value={recordName}
+              fullWidth
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                setRecordName(event.target.value);
+              }}
+            />
+          </Box>
+          <Stack direction="row" gap={2} my={4}>
+            <ButtonAction color="success" onClick={handleCreateGameList} isPending={isPending}>
+              Uložit verzi do DB
+            </ButtonAction>
+          </Stack>
+        </>
       )}
-    </>
+    </Box>
   );
 };
