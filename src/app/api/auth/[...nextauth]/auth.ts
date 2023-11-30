@@ -7,6 +7,7 @@ const providers = [];
 
 const clientId = process.env.GOOGLE_CLIENT_ID;
 const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+const secret = process.env.NEXTAUTH_SECRET;
 
 if (clientId && clientSecret) {
   providers.push(
@@ -19,6 +20,7 @@ if (clientId && clientSecret) {
 
 export const authOptions = {
   providers,
+  secret,
 } satisfies NextAuthOptions;
 
 export function auth(

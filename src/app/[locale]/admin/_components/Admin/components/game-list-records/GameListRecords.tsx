@@ -19,6 +19,7 @@ import { GameListRecord, GameListRecordStatus } from '@/actions/types';
 import { Add, Delete, Done, QueryBuilder, Settings, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Game, Status } from '@/types';
 import { ConfirmDeleteModal } from '../confirm-delete-modal';
+import { IS_DEVELOPMENT } from '../../../config';
 
 const ReactJson = dynamic(() => import('react-json-view'), {
   ssr: false,
@@ -52,16 +53,12 @@ export const GameListRecords = ({
   const getCellSx = (recordId: number) => ({ fontWeight: activeGameListRecord === recordId ? 'bold' : undefined });
 
   const getStatusIcon = (status: `${GameListRecordStatus}`) =>
-    status === GameListRecordStatus.COMPLETED ? (
-      <Done fontSize="small" sx={{ verticalAlign: 'middle' }} />
-    ) : (
-      <QueryBuilder fontSize="small" sx={{ verticalAlign: 'middle' }} />
-    );
+    status === GameListRecordStatus.COMPLETED ? <Done fontSize="small" /> : <QueryBuilder fontSize="small" />;
 
   const getStatusText = (status: `${GameListRecordStatus}`, gameList: Game[]) =>
     status === GameListRecordStatus.COMPLETED
       ? 'Staženo'
-      : `Chybí ${gameList?.filter((game) => game.status === Status.FINISHED).length}`;
+      : `Chybí ${gameList?.filter((game) => game.status === Status.NEW).length}`;
 
   return (
     <>
@@ -77,8 +74,7 @@ export const GameListRecords = ({
               <TableCell>Vytvořeno</TableCell>
               <TableCell>Název</TableCell>
               <TableCell>Stav loaderu</TableCell>
-              <TableCell>Počet her</TableCell>
-              <TableCell></TableCell>
+              <TableCell>Nenalezeno / Celkem her</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -88,7 +84,10 @@ export const GameListRecords = ({
                 sx={(theme) => ({
                   '&:last-child td, &:last-child th': { border: 0 },
                   backgroundColor: selectedRecordId === recordId ? alpha(theme.palette.primary.main, 0.25) : undefined,
+                  cursor: 'pointer',
                 })}
+                onClick={() => handleSelectRecord(recordId)}
+                hover
               >
                 <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
                   {activeGameListRecord === recordId ? (
@@ -104,17 +103,12 @@ export const GameListRecords = ({
                   {recordName}
                 </TableCell>
                 <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
-                  {getStatusIcon(status)} {getStatusText(status, gameList)}
+                  <Stack direction="row" alignItems="center" gap={1}>
+                    {getStatusIcon(status)} {getStatusText(status, gameList)}
+                  </Stack>
                 </TableCell>
                 <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
-                  {gameList.length}
-                </TableCell>
-                <TableCell component="td" scope="row">
-                  <Stack direction={'row'} gap={1}>
-                    <Button variant="contained" onClick={() => handleSelectRecord(recordId)}>
-                      Detail
-                    </Button>
-                  </Stack>
+                  {gameList?.filter((game) => game.status === Status.UNFINISHED).length} / {gameList.length}
                 </TableCell>
               </TableRow>
             ))}
@@ -129,9 +123,11 @@ export const GameListRecords = ({
         <Button variant="contained" color="error" onClick={handleOpenModal} startIcon={<Delete />}>
           Smazat všechny seznamy
         </Button>
-        <Button variant="outlined" color="primary" onClick={handleShowDbScan} startIcon={<Settings />}>
-          Zobrazit DbScan
-        </Button>
+        {IS_DEVELOPMENT && (
+          <Button variant="outlined" color="primary" onClick={handleShowDbScan} startIcon={<Settings />}>
+            Zobrazit DbScan
+          </Button>
+        )}
       </Stack>
 
       {showDbScan && <ReactJson src={gameListRecords} theme="pop" />}

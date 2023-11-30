@@ -1,12 +1,17 @@
 import { AppBar, Avatar, Box, Button, Container, Stack, Toolbar, Typography } from '@mui/material';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { LEFT_MENU_WIDTH } from './config';
+import { UseUserAuthReturn, UserAuthStatus } from './userAuth';
 
-export const AppNav = () => {
+type Props = Pick<UseUserAuthReturn, 'userAuthRecord'>;
+
+export const AppNav = ({ userAuthRecord }: Props) => {
   const { data: session } = useSession();
+  const leftMenuDisplayed = userAuthRecord?.status === UserAuthStatus.Authorized;
 
   return (
-    <AppBar position="static">
-      <Container>
+    <AppBar position="sticky" sx={leftMenuDisplayed ? { pl: LEFT_MENU_WIDTH / 8 + 4 } : undefined}>
+      <Container maxWidth="lg" sx={leftMenuDisplayed ? { ml: 0 } : undefined}>
         <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
           <Stack direction="row" alignItems="center" gap={1}>
             <Typography sx={{ pt: 0.5 }}>Administrace</Typography>

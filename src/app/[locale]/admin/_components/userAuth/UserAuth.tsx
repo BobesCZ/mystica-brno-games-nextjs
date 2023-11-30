@@ -1,19 +1,15 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { useUserAuth } from './useUserAuth';
 import { Alert, Box, Container } from '@mui/material';
 import { ButtonAction } from '@/components';
-import { UserAuthRecord, UserAuthStatus } from './types';
+import { UseUserAuthReturn, UserAuthStatus } from './types';
 
-type Props = {
-  userAuthRecords: UserAuthRecord[];
+type Props = UseUserAuthReturn & {
   children: ReactNode;
 };
 
-export function UserAuth({ userAuthRecords, children }: Props) {
-  const { userAuthRecord, handleCreateUserAuth, isPending } = useUserAuth(userAuthRecords);
-
+export function UserAuth({ userAuthRecord, handleCreateUserAuth, isPending, children }: Props) {
   if (userAuthRecord === null) {
     return (
       <Container sx={{ mt: 4 }}>

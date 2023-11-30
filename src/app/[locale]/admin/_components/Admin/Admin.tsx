@@ -1,8 +1,6 @@
 'use client';
 
-import Container from '@mui/material/Container';
-import { Layout } from '../Layout';
-import { CsvLoader, GameListRecordDetail, GameListRecords, UserAuthRecords } from './components';
+import { CsvLoader, GameListRecordDetail, GameListRecords } from './components';
 import { GameListRecord } from '@/actions/types';
 import { useState } from 'react';
 import { Divider } from '@mui/material';
@@ -30,32 +28,26 @@ export default function Admin({ gameListRecords, activeGameListRecord, userAuthR
   };
 
   return (
-    <Layout userAuthRecords={userAuthRecords}>
-      <Container maxWidth="lg">
-        <UserAuthRecords userAuthRecords={userAuthRecords} />
+    <>
+      <GameListRecords
+        gameListRecords={gameListRecords}
+        selectedRecordId={selectedRecordId}
+        handleSelectRecord={handleSelectRecord}
+        onShowCreatePage={onShowCreatePage}
+        activeGameListRecord={activeGameListRecord}
+      />
 
-        <Divider sx={{ mb: 3 }} />
+      <Divider sx={{ mb: 3 }} />
 
-        <GameListRecords
-          gameListRecords={gameListRecords}
-          selectedRecordId={selectedRecordId}
+      {showCreatePage && <CsvLoader handleSelectRecord={handleSelectRecord} />}
+
+      {selectedRecord && (
+        <GameListRecordDetail
           handleSelectRecord={handleSelectRecord}
-          onShowCreatePage={onShowCreatePage}
           activeGameListRecord={activeGameListRecord}
+          selectedRecord={selectedRecord}
         />
-
-        <Divider sx={{ mb: 3 }} />
-
-        {showCreatePage && <CsvLoader handleSelectRecord={handleSelectRecord} />}
-
-        {selectedRecord && (
-          <GameListRecordDetail
-            handleSelectRecord={handleSelectRecord}
-            activeGameListRecord={activeGameListRecord}
-            selectedRecord={selectedRecord}
-          />
-        )}
-      </Container>
-    </Layout>
+      )}
+    </>
   );
 }

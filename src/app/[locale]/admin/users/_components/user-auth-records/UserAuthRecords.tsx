@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Alert,
   Button,
   Paper,
   Stack,
@@ -16,9 +17,10 @@ import {
 import { useState, useTransition } from 'react';
 import dynamic from 'next/dynamic';
 import { Delete, Done, QueryBuilder, Settings } from '@mui/icons-material';
-import { UserAuthRecord, UserAuthStatus, useUserAuth } from '../../../userAuth';
+import { UserAuthRecord, UserAuthStatus, useUserAuth } from '../../../_components/userAuth';
 import { authorizeUserAuthRecord, deleteUserAuthRecord } from '@/actions/userAuth';
 import { ButtonAction } from '@/components';
+import { IS_DEVELOPMENT } from '../../../_components/config';
 
 const ReactJson = dynamic(() => import('react-json-view'), {
   ssr: false,
@@ -47,11 +49,7 @@ export const UserAuthRecords = ({ userAuthRecords }: Props) => {
   };
 
   const getStatusIcon = (status: `${UserAuthStatus}`) =>
-    status === UserAuthStatus.Authorized ? (
-      <Done fontSize="small" sx={{ verticalAlign: 'middle' }} />
-    ) : (
-      <QueryBuilder fontSize="small" sx={{ verticalAlign: 'middle' }} />
-    );
+    status === UserAuthStatus.Authorized ? <Done fontSize="small" /> : <QueryBuilder fontSize="small" />;
 
   const getStatusText = (status: `${UserAuthStatus}`) =>
     status === UserAuthStatus.Waiting ? 'Čeká na udělení přístupu' : 'Přístup udělen';
@@ -61,6 +59,10 @@ export const UserAuthRecords = ({ userAuthRecords }: Props) => {
       <Typography variant="h2" gutterBottom mt={4}>
         Seznam uživatelů
       </Typography>
+
+      {!IS_DEVELOPMENT && (
+        <Alert severity="warning">Na tomto prostředí nelze editovat uživatele. Kontaktujte svého správce.</Alert>
+      )}
 
       <TableContainer component={Paper} elevation={4} sx={{ my: 4, maxHeight: '500px', overflow: 'auto' }}>
         <Table stickyHeader>
@@ -89,7 +91,9 @@ export const UserAuthRecords = ({ userAuthRecords }: Props) => {
                   {record.user.email}
                 </TableCell>
                 <TableCell component="td" scope="row">
-                  {getStatusIcon(record.status)} {getStatusText(record.status)}
+                  <Stack direction="row" alignItems="center" gap={1}>
+                    {getStatusIcon(record.status)} {getStatusText(record.status)}
+                  </Stack>
                 </TableCell>
 
                 <TableCell component="td" scope="row">
@@ -99,7 +103,7 @@ export const UserAuthRecords = ({ userAuthRecords }: Props) => {
                       onClick={() => handleAuthorize(record)}
                       isPending={isPending}
                       startIcon={<Done />}
-                      disabled={record?.status === UserAuthStatus.Authorized}
+                      disabled={!IS_DEVELOPMENT || record?.status === UserAuthStatus.Authorized}
                     >
                       Udělit přistup
                     </ButtonAction>
@@ -108,7 +112,7 @@ export const UserAuthRecords = ({ userAuthRecords }: Props) => {
                       onClick={() => handleDelete(record.recordId)}
                       isPending={isPending}
                       startIcon={<Delete />}
-                      disabled={userAuthRecord?.recordId === record.recordId}
+                      disabled={!IS_DEVELOPMENT || userAuthRecord?.recordId === record.recordId}
                     >
                       Smazat
                     </ButtonAction>
@@ -120,11 +124,13 @@ export const UserAuthRecords = ({ userAuthRecords }: Props) => {
         </Table>
       </TableContainer>
 
-      <Stack direction="row" gap={2} alignItems="center" my={4}>
-        <Button variant="outlined" color="primary" onClick={handleShowDbScan} startIcon={<Settings />}>
-          Zobrazit DbScan
-        </Button>
-      </Stack>
+      {IS_DEVELOPMENT && (
+        <Stack direction="row" gap={2} alignItems="center" my={4}>
+          <Button variant="outlined" color="primary" onClick={handleShowDbScan} startIcon={<Settings />}>
+            Zobrazit DbScan
+          </Button>
+        </Stack>
+      )}
 
       {showDbScan && <ReactJson src={userAuthRecords} theme="pop" />}
     </>

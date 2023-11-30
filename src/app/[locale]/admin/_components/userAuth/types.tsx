@@ -11,3 +11,9 @@ export type UserAuthRecord = {
     email: string;
   };
 };
+
+export type UseUserAuthReturn = {
+  userAuthRecord: UserAuthRecord | null | undefined;
+  handleCreateUserAuth: () => Promise<void>;
+  isPending: boolean;
+};

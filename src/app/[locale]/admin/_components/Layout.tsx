@@ -1,11 +1,12 @@
 'use client';
 
-import { Box, Stack } from '@mui/material';
+import { Container, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 import { ThemeRegistry } from './theme/ThemeRegistry';
 import { AppNav } from './AppNav';
 import { UserAuth } from './userAuth/UserAuth';
-import { UserAuthRecord } from './userAuth';
+import { UserAuthRecord, useUserAuth } from './userAuth';
+import LeftMenu from './LeftMenu';
 
 type Props = {
   userAuthRecords: UserAuthRecord[];
@@ -13,13 +14,20 @@ type Props = {
 };
 
 export function Layout({ userAuthRecords, children }: Props) {
+  const { userAuthRecord, handleCreateUserAuth, isPending } = useUserAuth(userAuthRecords);
+
   return (
     <ThemeRegistry>
       <Stack sx={{ minHeight: '100vh' }}>
-        <AppNav />
-        <Box flexGrow={1}>
-          <UserAuth userAuthRecords={userAuthRecords}>{children}</UserAuth>
-        </Box>
+        <AppNav userAuthRecord={userAuthRecord} />
+        <Stack direction="row" flexGrow={1}>
+          <UserAuth userAuthRecord={userAuthRecord} handleCreateUserAuth={handleCreateUserAuth} isPending={isPending}>
+            <LeftMenu />
+            <Container maxWidth="lg" sx={{ ml: 4 }}>
+              {children}
+            </Container>
+          </UserAuth>
+        </Stack>
       </Stack>
     </ThemeRegistry>
   );
