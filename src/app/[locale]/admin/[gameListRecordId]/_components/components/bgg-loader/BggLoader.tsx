@@ -11,10 +11,10 @@ import { unionBy } from 'lodash-es';
 import { Sync } from '@mui/icons-material';
 
 type Props = {
-  selectedRecord: GameListRecord;
+  gameListRecord: GameListRecord;
 };
 
-export const BggLoader = ({ selectedRecord }: Props) => {
+export const BggLoader = ({ gameListRecord }: Props) => {
   const [_isPending, startTransition] = useTransition();
 
   const [newGameList, setNewGameList] = useState<Game[]>([]);
@@ -24,7 +24,7 @@ export const BggLoader = ({ selectedRecord }: Props) => {
   const processingCount = log.length;
   const processGoalCount = GAME_LIST_SLICE[1] - GAME_LIST_SLICE[0];
 
-  const gameList = selectedRecord.gameList;
+  const gameList = gameListRecord.gameList;
 
   const handleLoad = async () => {
     if (!gameList.length) {
@@ -43,9 +43,9 @@ export const BggLoader = ({ selectedRecord }: Props) => {
   useEffect(() => {
     const mergedGameList = unionBy([...newGameList, ...gameList], 'uid');
 
-    if (selectedRecord && mergedGameList.length) {
+    if (gameListRecord && mergedGameList.length) {
       const handleSaveGameList = async () => {
-        startTransition(() => updateGameListRecord(selectedRecord, mergedGameList));
+        startTransition(() => updateGameListRecord(gameListRecord, mergedGameList));
       };
 
       handleSaveGameList();

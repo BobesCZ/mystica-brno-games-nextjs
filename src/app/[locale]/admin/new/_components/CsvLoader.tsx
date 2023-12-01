@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Button, Stack, TextField, Typography, styled } from '@mui/material';
 import { getGameFromCsv, mergeNotesToCsvGame } from './utils';
 import { ChangeEvent, ChangeEventHandler, useState, useTransition } from 'react';
@@ -7,7 +9,9 @@ import { Upload } from '@mui/icons-material';
 import { Game } from '@/types';
 import { parse } from 'papaparse';
 import { CsvGame } from '@/data';
-import { CsvPreview } from '../csv-preview';
+import { CsvPreview } from './components/csv-preview';
+import { useRouter } from 'next/navigation';
+import { Urls } from '@/config';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -21,12 +25,9 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-type Props = {
-  handleSelectRecord: (recordId: number) => void;
-};
-
-export const CsvLoader = ({ handleSelectRecord }: Props) => {
+export const CsvLoader = () => {
   const [isPending, startTransition] = useTransition();
+  const { push } = useRouter();
   const [recordName, setRecordName] = useState('');
   const [csvGameList, setCsvGameList] = useState<Game[]>([]);
 
@@ -45,7 +46,7 @@ export const CsvLoader = ({ handleSelectRecord }: Props) => {
   const handleCreateGameList = async () => {
     startTransition(async () => {
       const { recordId } = await createGameListRecord(csvGameList, recordName);
-      handleSelectRecord(recordId);
+      push(`${Urls.ADMIN}/${recordId}`);
     });
   };
 

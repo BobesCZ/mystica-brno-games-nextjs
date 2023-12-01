@@ -3,24 +3,33 @@
 import { Alert, AlertTitle, Box, Button, Divider, Stack, Typography } from '@mui/material';
 import { useMemo, useState, useTransition } from 'react';
 import { deleteGameListRecord, setActiveGameListRecord } from '@/actions';
-import { Delete, Download, KeyboardDoubleArrowRight, Visibility, VisibilityOff } from '@mui/icons-material';
-import { ButtonAction, GameList } from '@/components';
+import {
+  ChevronLeft,
+  Delete,
+  Download,
+  KeyboardDoubleArrowRight,
+  Visibility,
+  VisibilityOff,
+} from '@mui/icons-material';
+import { ButtonAction, GameList, Link } from '@/components';
 import { GameListRecord, GameListRecordStatus } from '@/actions/types';
 import { Status } from '@/types';
-import { BggLoader } from '../bgg-loader';
+import { BggLoader } from './components';
+import { useRouter } from 'next/navigation';
+import { Urls } from '@/config';
 
 type Props = {
-  handleSelectRecord: (recordId?: number) => void;
   activeGameListRecord?: number;
-  selectedRecord: GameListRecord;
+  gameListRecord: GameListRecord;
 };
 
-export const GameListRecordDetail = ({ handleSelectRecord, activeGameListRecord, selectedRecord }: Props) => {
+export const GameListRecordDetail = ({ activeGameListRecord, gameListRecord }: Props) => {
   const [isPending, startTransition] = useTransition();
+  const { push } = useRouter();
   const [showGameList, setShowGameList] = useState(false);
   const [showBggLoader, setShowBggLoader] = useState(false);
 
-  const gameList = selectedRecord.gameList;
+  const gameList = gameListRecord.gameList;
 
   const { newCount, unfinishedCount } = useMemo(
     () => ({
@@ -32,16 +41,18 @@ export const GameListRecordDetail = ({ handleSelectRecord, activeGameListRecord,
   );
 
   const handleDelete = async () => {
-    startTransition(() => deleteGameListRecord(selectedRecord.recordId));
-    handleSelectRecord(undefined);
+    startTransition(async () => {
+      await deleteGameListRecord(gameListRecord.recordId);
+      push(Urls.ADMIN);
+    });
   };
 
   const handleActivate = async () => {
-    startTransition(() => setActiveGameListRecord(selectedRecord.recordId));
+    startTransition(() => setActiveGameListRecord(gameListRecord.recordId));
   };
 
   const handleDownload = () => {
-    const content = JSON.stringify(selectedRecord, undefined, 2);
+    const content = JSON.stringify(gameListRecord, undefined, 2);
 
     const link = document.createElement('a');
     const file = new Blob([content], { type: 'text/plain' });
@@ -56,10 +67,15 @@ export const GameListRecordDetail = ({ handleSelectRecord, activeGameListRecord,
 
   return (
     <>
-      <Typography variant="h2" gutterBottom>
-        {selectedRecord.recordName || ''}{' '}
+      <Link href={Urls.ADMIN} display="inline-flex">
+        <Stack direction="row" alignItems="center" mt={3}>
+          <ChevronLeft fontSize="small" /> zpět na Seznam her
+        </Stack>
+      </Link>
+      <Typography variant="h2" gutterBottom mt={2}>
+        {gameListRecord.recordName || ''}{' '}
         <Box component="span" fontWeight="normal">
-          ({new Date(selectedRecord.recordId).toLocaleString()})
+          ({new Date(gameListRecord.recordId).toLocaleString()})
         </Box>
       </Typography>
 
@@ -72,7 +88,7 @@ export const GameListRecordDetail = ({ handleSelectRecord, activeGameListRecord,
           color="success"
           onClick={handleActivate}
           isPending={isPending}
-          disabled={activeGameListRecord === selectedRecord.recordId}
+          disabled={activeGameListRecord === gameListRecord.recordId}
           startIcon={<Visibility />}
         >
           Označit jako aktivní
@@ -83,14 +99,14 @@ export const GameListRecordDetail = ({ handleSelectRecord, activeGameListRecord,
           onClick={handleDelete}
           isPending={isPending}
           startIcon={<Delete />}
-          disabled={activeGameListRecord === selectedRecord.recordId}
+          disabled={activeGameListRecord === gameListRecord.recordId}
         >
           Smazat seznam
         </ButtonAction>
       </Stack>
 
       <Stack direction="row" gap={2} alignItems="center" my={4}>
-        {selectedRecord.status === GameListRecordStatus.COMPLETED ? (
+        {gameListRecord.status === GameListRecordStatus.COMPLETED ? (
           <Alert severity="success" sx={{ width: '50%' }}>
             <AlertTitle>Všechny hry staženy ({gameList.length})</AlertTitle>
             Nenalezeno {unfinishedCount} her.
@@ -102,7 +118,7 @@ export const GameListRecordDetail = ({ handleSelectRecord, activeGameListRecord,
           </Alert>
         )}
 
-        {activeGameListRecord === selectedRecord.recordId ? (
+        {activeGameListRecord === gameListRecord.recordId ? (
           <Alert severity="info" icon={<Visibility />} sx={{ width: '50%' }}>
             <AlertTitle>Zveřejněno</AlertTitle>
             Seznam je aktuálně viditelný pro uživatele.
@@ -136,7 +152,7 @@ export const GameListRecordDetail = ({ handleSelectRecord, activeGameListRecord,
 
       <Divider sx={{ mb: 3 }} />
 
-      {showBggLoader && <BggLoader selectedRecord={selectedRecord} />}
+      {showBggLoader && <BggLoader gameListRecord={gameListRecord} />}
       {showGameList && <GameList gameList={gameList} gameTotalCount={gameList.length} />}
     </>
   );

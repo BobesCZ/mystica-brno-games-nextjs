@@ -2,6 +2,8 @@ import { AppBar, Avatar, Box, Button, Container, Stack, Toolbar, Typography } fr
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { LEFT_MENU_WIDTH } from './config';
 import { UseUserAuthReturn, UserAuthStatus } from './userAuth';
+import { Link } from '@/components';
+import { Urls } from '@/config';
 
 type Props = Pick<UseUserAuthReturn, 'userAuthRecord'>;
 
@@ -14,7 +16,9 @@ export const AppNav = ({ userAuthRecord }: Props) => {
       <Container maxWidth="lg" sx={leftMenuDisplayed ? { ml: 0 } : undefined}>
         <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
           <Stack direction="row" alignItems="center" gap={1}>
-            <Typography sx={{ pt: 0.5 }}>Administrace</Typography>
+            <Link color="#fff" underline="none" href={Urls.ADMIN}>
+              Administrace
+            </Link>
           </Stack>
           <Box ml={2} mr={-1}>
             {session ? (

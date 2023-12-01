@@ -11,7 +11,6 @@ import {
   TableHead,
   TableRow,
   Typography,
-  alpha,
 } from '@mui/material';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -20,6 +19,8 @@ import { Add, Delete, Done, QueryBuilder, Settings, Visibility, VisibilityOff } 
 import { Game, Status } from '@/types';
 import { ConfirmDeleteModal } from '../confirm-delete-modal';
 import { IS_DEVELOPMENT } from '../../../config';
+import { Link } from '@/components';
+import { Urls } from '@/config';
 
 const ReactJson = dynamic(() => import('react-json-view'), {
   ssr: false,
@@ -27,19 +28,10 @@ const ReactJson = dynamic(() => import('react-json-view'), {
 
 type Props = {
   gameListRecords: GameListRecord[];
-  selectedRecordId: number | undefined;
-  handleSelectRecord: (recordId?: number) => void;
-  onShowCreatePage: () => void;
   activeGameListRecord?: number;
 };
 
-export const GameListRecords = ({
-  gameListRecords,
-  selectedRecordId,
-  handleSelectRecord,
-  onShowCreatePage,
-  activeGameListRecord,
-}: Props) => {
+export const GameListRecords = ({ gameListRecords, activeGameListRecord }: Props) => {
   const [showDbScan, setShowDbScan] = useState(false);
 
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -67,47 +59,48 @@ export const GameListRecords = ({
       </Typography>
 
       <TableContainer component={Paper} elevation={4} sx={{ my: 4, maxHeight: '500px', overflow: 'auto' }}>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell>Aktivní</TableCell>
-              <TableCell>Vytvořeno</TableCell>
-              <TableCell>Název</TableCell>
-              <TableCell>Stav loaderu</TableCell>
-              <TableCell>Nenalezeno / Celkem her</TableCell>
+        <Table stickyHeader component="div">
+          <TableHead component="div">
+            <TableRow component="div">
+              <TableCell component="div">Aktivní</TableCell>
+              <TableCell component="div">Vytvořeno</TableCell>
+              <TableCell component="div">Název</TableCell>
+              <TableCell component="div">Stav loaderu</TableCell>
+              <TableCell component="div">Nenalezeno / Celkem her</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody component="div">
             {gameListRecords?.map(({ recordId, status, recordName, gameList }, index) => (
               <TableRow
                 key={`${recordId}_${index}`}
                 sx={(theme) => ({
                   '&:last-child td, &:last-child th': { border: 0 },
-                  backgroundColor: selectedRecordId === recordId ? alpha(theme.palette.primary.main, 0.25) : undefined,
+                  textDecoration: 'none',
                   cursor: 'pointer',
                 })}
-                onClick={() => handleSelectRecord(recordId)}
                 hover
+                component={Link}
+                href={`${Urls.ADMIN}/${recordId}`}
               >
-                <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
+                <TableCell component="div" scope="row" sx={getCellSx(recordId)}>
                   {activeGameListRecord === recordId ? (
                     <Visibility fontSize="small" />
                   ) : (
                     <VisibilityOff fontSize="small" color="disabled" />
                   )}
                 </TableCell>
-                <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
+                <TableCell component="div" scope="row" sx={getCellSx(recordId)}>
                   {new Date(recordId).toLocaleString()}
                 </TableCell>
-                <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
+                <TableCell component="div" scope="row" sx={getCellSx(recordId)}>
                   {recordName}
                 </TableCell>
-                <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
+                <TableCell component="div" scope="row" sx={getCellSx(recordId)}>
                   <Stack direction="row" alignItems="center" gap={1}>
                     {getStatusIcon(status)} {getStatusText(status, gameList)}
                   </Stack>
                 </TableCell>
-                <TableCell component="td" scope="row" sx={getCellSx(recordId)}>
+                <TableCell component="div" scope="row" sx={getCellSx(recordId)}>
                   {gameList?.filter((game) => game.status === Status.UNFINISHED).length} / {gameList.length}
                 </TableCell>
               </TableRow>
@@ -117,7 +110,7 @@ export const GameListRecords = ({
       </TableContainer>
 
       <Stack direction="row" gap={2} alignItems="center" my={4}>
-        <Button variant="contained" color="success" onClick={onShowCreatePage} startIcon={<Add />}>
+        <Button variant="contained" color="success" startIcon={<Add />} LinkComponent={Link} href={Urls.ADMIN_NEW}>
           Vytvořit nový seznam
         </Button>
         <Button variant="contained" color="error" onClick={handleOpenModal} startIcon={<Delete />}>

@@ -17,10 +17,10 @@ import {
 import { useState, useTransition } from 'react';
 import dynamic from 'next/dynamic';
 import { Delete, Done, QueryBuilder, Settings } from '@mui/icons-material';
-import { UserAuthRecord, UserAuthStatus, useUserAuth } from '../../../_components/userAuth';
+import { UserAuthRecord, UserAuthStatus, useUserAuth } from '../../../../_components/userAuth';
 import { authorizeUserAuthRecord, deleteUserAuthRecord } from '@/actions/userAuth';
 import { ButtonAction } from '@/components';
-import { IS_DEVELOPMENT } from '../../../_components/config';
+import { IS_DEVELOPMENT } from '../../../../_components/config';
 
 const ReactJson = dynamic(() => import('react-json-view'), {
   ssr: false,

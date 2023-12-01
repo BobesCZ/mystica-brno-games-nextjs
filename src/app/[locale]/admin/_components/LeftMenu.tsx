@@ -1,7 +1,7 @@
 'use client';
 
 import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from '@mui/material';
-import { People, ViewList } from '@mui/icons-material';
+import { Add, People, ViewList } from '@mui/icons-material';
 import { Link } from '@/components';
 import { Urls } from '@/config';
 import { LEFT_MENU_WIDTH } from './config';
@@ -28,15 +28,23 @@ export default function LeftMenu() {
       <List>
         <ListItem disablePadding>
           <ListItemButton LinkComponent={Link} href={Urls.ADMIN} selected={pathname === Urls.ADMIN}>
-            <ListItemIcon>
+            <ListItemIcon sx={{ minWidth: 44 }}>
               <ViewList />
             </ListItemIcon>
             <ListItemText primary="Seznamy her" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
+          <ListItemButton LinkComponent={Link} href={Urls.ADMIN_NEW} selected={pathname === Urls.ADMIN_NEW}>
+            <ListItemIcon sx={{ minWidth: 44 }}>
+              <Add />
+            </ListItemIcon>
+            <ListItemText primary="Nový seznam" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
           <ListItemButton LinkComponent={Link} href={Urls.ADMIN_USERS} selected={pathname === Urls.ADMIN_USERS}>
-            <ListItemIcon>
+            <ListItemIcon sx={{ minWidth: 44 }}>
               <People />
             </ListItemIcon>
             <ListItemText primary="Uživatelé" />
