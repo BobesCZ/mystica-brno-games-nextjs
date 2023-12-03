@@ -8,7 +8,7 @@ import { createGameListRecord } from '@/actions';
 import { Upload } from '@mui/icons-material';
 import { Game } from '@/types';
 import { parse } from 'papaparse';
-import { CsvGame } from '@/data';
+import { CsvColumns, CsvGame } from '@/data';
 import { CsvPreview } from './components/csv-preview';
 import { useRouter } from 'next/navigation';
 import { Urls } from '@/config';
@@ -55,6 +55,14 @@ export const CsvLoader = () => {
       <Typography variant="h2" gutterBottom>
         Vytvořit nový seznam
       </Typography>
+
+      <Typography variant="h3">Názvy zpracovávaných sloupců</Typography>
+
+      <Box sx={{ my: 3 }}>
+        {Object.values(CsvColumns).map((column) => (
+          <div key={column}>{column}</div>
+        ))}
+      </Box>
 
       <Typography variant="h3">Nahrát CSV soubor</Typography>
 

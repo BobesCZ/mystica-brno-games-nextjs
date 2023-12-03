@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, AlertTitle, Box, Button, Divider, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Button, Divider, Stack, ThemeProvider, Typography } from '@mui/material';
 import { useMemo, useState, useTransition } from 'react';
 import { deleteGameListRecord, setActiveGameListRecord } from '@/actions';
 import {
@@ -17,6 +17,7 @@ import { Status } from '@/types';
 import { BggLoader } from './components';
 import { useRouter } from 'next/navigation';
 import { Urls } from '@/config';
+import { theme } from '@/theme/theme';
 
 type Props = {
   activeGameListRecord?: number;
@@ -88,7 +89,9 @@ export const GameListRecordDetail = ({ activeGameListRecord, gameListRecord }: P
           color="success"
           onClick={handleActivate}
           isPending={isPending}
-          disabled={activeGameListRecord === gameListRecord.recordId}
+          disabled={
+            gameListRecord.status !== GameListRecordStatus.COMPLETED || activeGameListRecord === gameListRecord.recordId
+          }
           startIcon={<Visibility />}
         >
           Označit jako aktivní
@@ -153,7 +156,10 @@ export const GameListRecordDetail = ({ activeGameListRecord, gameListRecord }: P
       <Divider sx={{ mb: 3 }} />
 
       {showBggLoader && <BggLoader gameListRecord={gameListRecord} />}
-      {showGameList && <GameList gameList={gameList} gameTotalCount={gameList.length} />}
+
+      <ThemeProvider theme={theme}>
+        {showGameList && <GameList gameList={gameList} gameTotalCount={gameList.length} />}
+      </ThemeProvider>
     </>
   );
 };

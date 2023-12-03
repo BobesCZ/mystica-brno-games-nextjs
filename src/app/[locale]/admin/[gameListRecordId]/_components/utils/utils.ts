@@ -43,3 +43,6 @@ export const processGameList = async (
 
   setGameList((prev) => [...prev, ...newGameList]);
 };
+
+export const getEstimatedMinutes = (gameList: Game[]) =>
+  Math.floor((gameList.length * PROCESS_GAME_TIMEOUT) / 1000 / 60);

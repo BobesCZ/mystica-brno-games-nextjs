@@ -1,10 +1,9 @@
-import { Box, Button, LinearProgress, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Button, LinearProgress, Typography } from '@mui/material';
 import { useEffect, useState, useTransition } from 'react';
 import { UnfinishedOverview } from '../unfinished-overview';
 import { Log } from '../log';
 import { Game, LogRecord } from '@/types';
-import { GAME_LIST_SLICE } from '../../config';
-import { processGameList } from '../../utils';
+import { getEstimatedMinutes, processGameList } from '../../utils';
 import { updateGameListRecord } from '@/actions';
 import { GameListRecord } from '@/actions/types';
 import { unionBy } from 'lodash-es';
@@ -22,9 +21,8 @@ export const BggLoader = ({ gameListRecord }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const processingCount = log.length;
-  const processGoalCount = GAME_LIST_SLICE[1] - GAME_LIST_SLICE[0];
-
   const gameList = gameListRecord.gameList;
+  const estimatedMinutes = getEstimatedMinutes(gameList);
 
   const handleLoad = async () => {
     if (!gameList.length) {
@@ -35,7 +33,7 @@ export const BggLoader = ({ gameListRecord }: Props) => {
     setLog([]);
     setIsLoading(true);
 
-    await processGameList(gameList.slice(...GAME_LIST_SLICE), setNewGameList, setLog);
+    await processGameList(gameList, setNewGameList, setLog);
 
     setIsLoading(false);
   };
@@ -62,13 +60,18 @@ export const BggLoader = ({ gameListRecord }: Props) => {
 
         <UnfinishedOverview gameList={gameList} />
 
+        <Alert severity="warning" sx={{ mb: 4 }}>
+          <AlertTitle>Po spuštění loaderu nezavírejte stránku!</AlertTitle>
+          Všechny hry se uloží až po skončení loaderu. Nezavírejte stránku, dokud loader neskončí!
+        </Alert>
+
         <Box sx={{ display: 'inline-block', position: 'relative' }}>
           <Button variant="contained" color="info" onClick={handleLoad} disabled={isLoading} startIcon={<Sync />}>
-            Načíst BGG pro hry {GAME_LIST_SLICE[0]}-{GAME_LIST_SLICE[1]}
+            Načíst {gameList.length} her (cca {estimatedMinutes} min)
           </Button>
           {isLoading && (
             <LinearProgress
-              value={(processingCount / processGoalCount) * 100}
+              value={(processingCount / gameList.length) * 100}
               variant="determinate"
               color="success"
               sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
@@ -77,7 +80,7 @@ export const BggLoader = ({ gameListRecord }: Props) => {
         </Box>
         {isLoading && (
           <Typography color="text.secondary" sx={{ display: 'inline-block', ml: 2 }}>
-            {processingCount} / {processGoalCount}
+            {processingCount} / {gameList.length}
           </Typography>
         )}
       </Box>

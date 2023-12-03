@@ -1,4 +1,3 @@
-export const GAME_LIST_SLICE = [0, 400];
 export const PROCESS_GAME_TIMEOUT = 5000;
 
 export const TOO_MANY_REQUESTS_CODE = 429;

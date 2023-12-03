@@ -3,8 +3,6 @@ export enum CsvColumns {
   SOURCE_NAME = 'Název hry',
   ID = 'BGG ID',
   LANGS = 'Jazyky',
-  LOCATION = 'Umístění',
-  ADDED = 'Datum přidání',
 }
 
 export enum CsvGameType {
