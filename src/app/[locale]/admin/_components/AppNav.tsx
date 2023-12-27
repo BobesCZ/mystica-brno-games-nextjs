@@ -1,7 +1,7 @@
 import { AppBar, Avatar, Box, Button, Container, Stack, Toolbar, Typography } from '@mui/material';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { LEFT_MENU_WIDTH } from './config';
-import { UseUserAuthReturn, UserAuthStatus } from './userAuth';
+import { APPLY_AUTH, UseUserAuthReturn, UserAuthStatus } from './userAuth';
 import { Link } from '@/components';
 import { Urls } from '@/config';
 
@@ -9,7 +9,7 @@ type Props = Pick<UseUserAuthReturn, 'userAuthRecord'>;
 
 export const AppNav = ({ userAuthRecord }: Props) => {
   const { data: session } = useSession();
-  const leftMenuDisplayed = userAuthRecord?.status === UserAuthStatus.Authorized;
+  const leftMenuDisplayed = !APPLY_AUTH || userAuthRecord?.status === UserAuthStatus.Authorized;
 
   return (
     <AppBar position="sticky" sx={leftMenuDisplayed ? { pl: LEFT_MENU_WIDTH / 8 + 4 } : undefined}>

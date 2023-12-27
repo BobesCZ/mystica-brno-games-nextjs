@@ -36,9 +36,9 @@ export const CsvPreview = ({ gameList }: Props) => {
                 <TableCell component="td" scope="row">
                   {game.sourceName}
                 </TableCell>
-                {Object.keys(columns).map((column) => (
+                {Object.entries(columns).map(([column, columnOption]) => (
                   <TableCell key={column} component="td" scope="row">
-                    <CsvPreviewColumn column={column} game={game} />
+                    <CsvPreviewColumn column={column} columnOption={columnOption} game={game} />
                   </TableCell>
                 ))}
               </TableRow>

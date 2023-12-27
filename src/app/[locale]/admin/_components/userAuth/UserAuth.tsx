@@ -4,16 +4,14 @@ import { ReactNode } from 'react';
 import { Alert, Box, Container } from '@mui/material';
 import { ButtonAction } from '@/components';
 import { UseUserAuthReturn, UserAuthStatus } from './types';
-import { DISABLE_USER_AUTH_ON_DEVELOPMENT, IS_DEVELOPMENT } from '../config';
+import { APPLY_AUTH } from './config';
 
 type Props = UseUserAuthReturn & {
   children: ReactNode;
 };
 
 export function UserAuth({ userAuthRecord, handleCreateUserAuth, isPending, children }: Props) {
-  const applyAuth = IS_DEVELOPMENT ? !DISABLE_USER_AUTH_ON_DEVELOPMENT : true;
-
-  if (applyAuth && userAuthRecord === null) {
+  if (APPLY_AUTH && userAuthRecord === null) {
     return (
       <Container sx={{ mt: 4 }}>
         <Alert severity="info">Pro vstup do Administrace se musíte přihlásit.</Alert>
@@ -21,7 +19,7 @@ export function UserAuth({ userAuthRecord, handleCreateUserAuth, isPending, chil
     );
   }
 
-  if (applyAuth && userAuthRecord === undefined) {
+  if (APPLY_AUTH && userAuthRecord === undefined) {
     return (
       <Container sx={{ mt: 4 }}>
         <Alert severity="info">
@@ -36,7 +34,7 @@ export function UserAuth({ userAuthRecord, handleCreateUserAuth, isPending, chil
     );
   }
 
-  if (applyAuth && userAuthRecord?.status === UserAuthStatus.Waiting) {
+  if (APPLY_AUTH && userAuthRecord?.status === UserAuthStatus.Waiting) {
     return (
       <Container sx={{ mt: 4 }}>
         <Alert severity="info">Váš účet čeká na udělení přístupu do Administrace</Alert>
@@ -44,7 +42,7 @@ export function UserAuth({ userAuthRecord, handleCreateUserAuth, isPending, chil
     );
   }
 
-  if (!applyAuth || (applyAuth && userAuthRecord?.status === UserAuthStatus.Authorized)) {
+  if (!APPLY_AUTH || (APPLY_AUTH && userAuthRecord?.status === UserAuthStatus.Authorized)) {
     return <>{children}</>;
   }
 

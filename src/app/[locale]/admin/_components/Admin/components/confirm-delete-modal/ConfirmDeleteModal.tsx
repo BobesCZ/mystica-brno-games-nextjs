@@ -27,7 +27,10 @@ export const ConfirmDeleteModal = ({ isModalOpened, handleCloseModal }: Props) =
   const [isPending, startTransition] = useTransition();
 
   const handleDeleteRecords = async () => {
-    startTransition(() => deleteGameListRecords());
+    startTransition(async () => {
+      await deleteGameListRecords();
+      handleCloseModal();
+    });
   };
 
   return (

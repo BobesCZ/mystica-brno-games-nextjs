@@ -1,14 +1,16 @@
 import { CsvColumnsOptions } from '@/csvParser';
 import { Game } from '@/types';
 import { Typography } from '@mui/material';
+import { getColumnValue } from './utils';
 
 type Props = {
   column: string;
+  columnOption: CsvColumnsOptions[keyof CsvColumnsOptions];
   game: Game;
 };
 
-export const CsvPreviewColumn = ({ column, game }: Props) => {
-  const value = column === 'type' ? game.notes : game[column as keyof Omit<CsvColumnsOptions, 'type' | 'name'>];
+export const CsvPreviewColumn = ({ column, columnOption, game }: Props) => {
+  const value = getColumnValue(column, columnOption, game);
 
   return (
     <>

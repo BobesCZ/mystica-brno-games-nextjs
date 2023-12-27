@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const CardImage = ({ image }: Props) => {
-  const styles = { objectFit: 'contain', height: 250, mb: 3 };
+  const styles = { display: 'block', objectFit: 'contain', height: 250, mb: 3 };
 
   return image ? (
     <CardMedia component="img" image={image} alt="" sx={styles} />

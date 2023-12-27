@@ -3,12 +3,13 @@ import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import { UnfinishedOverview } from '../unfinished-overview';
 import { Log } from '../log';
 import { Game, LogRecord, Status } from '@/types';
-import { getEstimatedMinutes, processGameList } from '../../utils';
+import { getEstimatedMinutes, getEstimatedSeconds, processGameList } from '../../utils';
 import { updateGameListRecord } from '@/actions';
 import { GameListRecord } from '@/actions/types';
 import { isEqual } from 'lodash-es';
 import { Sync } from '@mui/icons-material';
 import { enqueueSnackbar } from 'notistack';
+import { Countdown } from '../countdown';
 
 type Props = {
   gameListRecord: GameListRecord;
@@ -23,11 +24,12 @@ export const BggLoader = ({ gameListRecord }: Props) => {
 
   const processingCount = log.length;
 
-  const { processingGameList, estimatedMinutes } = useMemo(() => {
+  const { processingGameList, estimatedSeconds, estimatedMinutes } = useMemo(() => {
     const processingGameList = gameListRecord.gameList.filter(({ status }) => status !== Status.FINISHED);
-    const estimatedMinutes = Math.max(getEstimatedMinutes(processingGameList), 1);
+    const estimatedSeconds = getEstimatedSeconds(processingGameList);
+    const estimatedMinutes = getEstimatedMinutes(estimatedSeconds);
 
-    return { processingGameList, estimatedMinutes };
+    return { processingGameList, estimatedSeconds, estimatedMinutes };
   }, [gameListRecord]);
 
   const handleLoad = async () => {
@@ -125,11 +127,10 @@ export const BggLoader = ({ gameListRecord }: Props) => {
                 }}
               />
             </Box>
-            {isLoading && (
-              <Typography variant="h4" color="text.secondary" noWrap flexShrink={0}>
-                {processingCount} / {processingGameList.length}
-              </Typography>
-            )}
+            <Typography variant="h4" color="text.secondary" noWrap flexShrink={0}>
+              {processingCount} / {processingGameList.length}
+            </Typography>
+            <Countdown estimatedSeconds={estimatedSeconds} />
           </Stack>
         )}
       </Box>

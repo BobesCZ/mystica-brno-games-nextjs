@@ -10,3 +10,13 @@ export const getRowColor = (theme: Theme, status: LogRecordState) => {
 
   return mapColors[status];
 };
+
+export const getStatusText = (status: LogRecordState) => {
+  const mapTexts = {
+    [LogRecordState.SUCCESS]: 'Načteno',
+    [LogRecordState.SKIPPED]: 'Přeskočeno',
+    [LogRecordState.ERROR]: 'Nenalezeno',
+  };
+
+  return mapTexts[status];
+};

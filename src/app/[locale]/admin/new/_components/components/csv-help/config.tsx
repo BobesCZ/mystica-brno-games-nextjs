@@ -1,6 +1,7 @@
 import { CSV_COLUMNS_OPTIONS } from '@/app/[locale]/admin/_components/config';
-import { Lang } from '@/types';
 import { CsvColumnsHelps } from './types';
+import { VALID_LANGS } from '@/csvParser/config';
+import { Lang } from '@/types';
 
 export const CSV_COLUMNS_HELPS: CsvColumnsHelps = {
   type: {
@@ -8,8 +9,8 @@ export const CSV_COLUMNS_HELPS: CsvColumnsHelps = {
     values: [CSV_COLUMNS_OPTIONS.type.typeGame, '[prázdné]'],
     description: (
       <>
-        GAME = řádek s hrou. <br />
-        Prázdný řádek se přiřadí jako poznámka k nejbližšímu předchozímu řádku s hrou.
+        <code>GAME</code> = řádek s hrou <br />
+        Prázdný řádek se přiřadí jako poznámka k nejbližšímu předchozímu řádku s hrou
       </>
     ),
   },
@@ -26,11 +27,13 @@ export const CSV_COLUMNS_HELPS: CsvColumnsHelps = {
   },
   langs: {
     required: false,
-    values: Object.values(Lang),
+    values: VALID_LANGS.map((lang) => (lang === Lang.Irrelevant ? CSV_COLUMNS_OPTIONS.langs.langIrrelevant : lang)),
     description: (
       <>
-        Jazyková verze = krabice se hrou v daném jazyce. <br />
-        Např. <code>CZ, ENG</code> = 1 krabice s českou verzí hry + 1 krabice s anglickou verzí.
+        Jazyková verze hry <br />
+        <code>{CSV_COLUMNS_OPTIONS.langs.langIrrelevant}</code> = Nezávislé na jazyce (např. obrázkové hry), ve filtraci
+        se zobrazuje vždy <br />U hry s obrázkovými komponenty a návodem v češtině doporučujeme{' '}
+        <code>CZ, {CSV_COLUMNS_OPTIONS.langs.langIrrelevant}</code>
       </>
     ),
   },

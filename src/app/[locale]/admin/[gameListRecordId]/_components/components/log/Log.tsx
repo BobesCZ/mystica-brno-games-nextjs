@@ -1,5 +1,5 @@
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
-import { getRowColor } from './utils';
+import { getRowColor, getStatusText } from './utils';
 import { LogRecord, LogRecordState } from '@/types';
 
 type Props = {
@@ -17,7 +17,7 @@ export const Log = ({ log }: Props) => {
         <Typography variant="h3" gutterBottom>
           Zpracováno {log?.length} (
           <Box component="span" color={(theme) => getRowColor(theme, LogRecordState.SUCCESS)}>
-            nalezeno {successCount}
+            načteno {successCount}
           </Box>
           ,{' '}
           <Box component="span" color={(theme) => getRowColor(theme, LogRecordState.ERROR)}>
@@ -42,7 +42,7 @@ export const Log = ({ log }: Props) => {
                   {sourceName}
                 </TableCell>
                 <TableCell component="td" scope="row" sx={(theme) => ({ color: getRowColor(theme, status) })}>
-                  {status.toUpperCase()}
+                  {getStatusText(status)}
                 </TableCell>
                 <TableCell component="td" scope="row" sx={(theme) => ({ color: getRowColor(theme, status) })}>
                   {statusMessage}

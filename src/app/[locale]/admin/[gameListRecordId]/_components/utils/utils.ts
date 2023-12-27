@@ -12,7 +12,7 @@ export const processGameList = async (
 ) => {
   const newGameList: Game[] = [];
 
-  for (const game of gameList) {
+  for (const [index, game] of gameList.entries()) {
     const { sourceName, status, id } = game;
 
     try {
@@ -27,8 +27,10 @@ export const processGameList = async (
         newGameList.push({ ...parsedGame, status: Status.FINISHED });
         setLog((prev) => [...prev, { sourceName, status: LogRecordState.SUCCESS }]);
 
-        // Slow iteration because of API request limit
-        await new Promise((resolve) => setTimeout(resolve, PROCESS_GAME_TIMEOUT));
+        if (index !== gameList.length - 1) {
+          // Slow iteration because of API request limit
+          await new Promise((resolve) => setTimeout(resolve, PROCESS_GAME_TIMEOUT));
+        }
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -44,5 +46,6 @@ export const processGameList = async (
   setGameList((prev) => [...prev, ...newGameList]);
 };
 
-export const getEstimatedMinutes = (gameList: Game[]) =>
-  Math.floor((gameList.length * PROCESS_GAME_TIMEOUT) / 1000 / 60);
+export const getEstimatedSeconds = (gameList: Game[]) => Math.floor((gameList.length * PROCESS_GAME_TIMEOUT) / 1000);
+
+export const getEstimatedMinutes = (estimatedSeconds: number) => Math.max(Math.floor(estimatedSeconds / 60), 1);
