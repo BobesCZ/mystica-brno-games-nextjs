@@ -1,4 +1,5 @@
 export * from './bgg-link';
+export * from './card-actions';
 export * from './card-image';
 export * from './game-info-item';
 export * from './game-weight';
@@ -6,5 +7,4 @@ export * from './lang-item';
 export * from './note-tag';
 export * from './players-count-string';
 export * from './rank-tag';
-export * from './show-more-toggler';
 export * from './zh-link';

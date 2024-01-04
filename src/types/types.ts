@@ -33,6 +33,7 @@ export type Game = Partial<Pick<BggThing, 'id' | 'primaryName' | 'yearpublished'
     statusMessage?: string;
     notes?: string[];
     langs?: Lang[];
+    location?: string;
     categories?: CategoryKey[];
     mechanics?: MechanicKey[];
     averageRating?: Rating;
