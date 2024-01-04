@@ -41,4 +41,8 @@ export const CSV_COLUMNS_OPTIONS: CsvColumnsOptions = {
     colName: 'Jazyky',
     langIrrelevant: 'nerozhoduje',
   },
+  location: {
+    enabled: true,
+    colName: 'Umístění',
+  },
 };

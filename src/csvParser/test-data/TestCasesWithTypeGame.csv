@@ -1,9 +1,10 @@
-Hra / Poznámka,Název hry,BGG ID,Jazyky
-GAME,Game,,
-GAME,Game with 2 notes,,
-,Note 1,,
-,Note 2,,
-GAME,Game with BGG ID,311659,
-GAME,Game with langs,,"CZ, ENG"
-GAME,"Game with note, BGG ID and langs",54998,"CZ, ENG, nerozhoduje"
-,Note,,
+Hra / Poznámka,Název hry,BGG ID,Jazyky,Umístění
+GAME,Game,,,
+GAME,Game with 2 notes,,,
+,Note 1,,,
+,Note 2,,,
+GAME,Game with BGG ID,311659,,
+GAME,Game with langs,,"CZ, ENG",
+GAME,Game with location,,,A1
+GAME,"Game with note, BGG ID and langs",54998,"CZ, ENG, nerozhoduje",B2
+,Note,,,

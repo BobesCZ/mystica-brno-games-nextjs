@@ -22,4 +22,5 @@ export type CsvColumnsOptions = {
   name: CsvColumnOption<false>;
   id: CsvColumnOption;
   langs: CsvColumnLangsOption;
+  location: CsvColumnOption;
 };

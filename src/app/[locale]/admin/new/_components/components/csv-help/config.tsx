@@ -37,4 +37,9 @@ export const CSV_COLUMNS_HELPS: CsvColumnsHelps = {
       </>
     ),
   },
+  location: {
+    required: false,
+    values: ['[text]'],
+    description: 'Umístění hry v místnosti nebo regálu',
+  },
 };

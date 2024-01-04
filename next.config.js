@@ -21,6 +21,30 @@ const nextConfig = {
       },
     });
 
+    config.module.rules.push({
+      test: /\.svg$/i,
+      issuer: /\.[jt]sx?$/,
+      use: [
+        {
+          loader: '@svgr/webpack',
+          options: {
+            ref: true,
+            svgoConfig: {
+              plugins: [
+                {
+                  name: 'cleanupIds',
+                  params: {
+                    remove: false,
+                    minify: false,
+                  },
+                },
+              ],
+            },
+          },
+        },
+      ],
+    });
+
     return config;
   },
 };

@@ -8,6 +8,7 @@ const getGameUid = (csvGame: CsvGame, langs: Lang[], options: CsvColumnsOptions)
 
 export const getGameFromCsv = (csvGame: CsvGame, options: CsvColumnsOptions): Game => {
   const id = options.id.enabled ? parseInt(csvGame[options.id.colName]) || undefined : undefined;
+  const location = options.location.enabled ? csvGame[options.location.colName].toString() : undefined;
 
   const langs = options.langs.enabled
     ? ((csvGame[options.langs.colName] as string) ?? '')
@@ -20,9 +21,10 @@ export const getGameFromCsv = (csvGame: CsvGame, options: CsvColumnsOptions): Ga
   return {
     uid: getGameUid(csvGame, langs, options),
     sourceName: csvGame[options.name.colName].toString(),
-    id: id,
+    id,
     langs,
     notes: csvGame.notes,
+    location,
     status: Status.NEW,
   };
 };

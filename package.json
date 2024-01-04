@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.11.9",
     "@mui/material": "^5.11.7",
+    "@svgr/webpack": "^8.1.0",
     "@types/node": "^20.4.0",
     "@types/papaparse": "^5.3.12",
     "@types/react": "18.2.14",

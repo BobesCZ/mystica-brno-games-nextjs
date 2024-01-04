@@ -1,8 +1,9 @@
-import { Box, Card, CardActions, CardContent, Chip, Collapse, Rating, Stack, Tooltip, Typography } from '@mui/material';
+import { Box, Card, CardContent, Chip, Collapse, Rating, Stack, Tooltip, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useState } from 'react';
 import {
   BggLink,
+  CardActions,
   CardImage,
   GameInfoItem,
   GameWeight,
@@ -10,7 +11,6 @@ import {
   NoteTag,
   PlayersCountString,
   RankTag,
-  ShowMoreToggler,
   ZhLink,
 } from './components';
 import { Group, Alarm } from '@mui/icons-material';
@@ -42,6 +42,7 @@ export const GameCard = ({
     notes,
     status,
     langs,
+    location,
   },
 }: Props) => {
   const t = useTranslations();
@@ -175,9 +176,11 @@ export const GameCard = ({
       </CardContent>
 
       {status === Status.FINISHED && (
-        <CardActions>
-          <ShowMoreToggler expanded={expanded} setExpanded={setExpanded} />
-        </CardActions>
+        <CardActions
+          expanded={expanded}
+          handleToggleExpanded={() => setExpanded((prev) => !prev)}
+          location={location}
+        />
       )}
     </Card>
   );
