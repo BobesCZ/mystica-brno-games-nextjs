@@ -7,18 +7,42 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Theme,
   Typography,
   alpha,
 } from '@mui/material';
 import { CSV_COLUMNS_HELPS } from './config';
 import { CsvColumnOption, CsvColumnsOptions } from '@/csvParser';
 import { pickBy } from 'lodash-es';
+import { CsvColumnsHelpDemand } from './types';
 
 export const CsvHelp = () => {
   const columns = pickBy(
     CSV_COLUMNS_HELPS,
     (_, column) => (CSV_COLUMNS_OPTIONS[column as keyof CsvColumnsOptions] as CsvColumnOption<true>)?.enabled !== false,
   );
+
+  const getDemandBackground = (demand: `${CsvColumnsHelpDemand}`, theme: Theme) => {
+    switch (demand) {
+      case CsvColumnsHelpDemand.Required:
+        return alpha(theme.palette.primary.main, 0.05);
+      case CsvColumnsHelpDemand.Unrequired:
+        return undefined;
+      case CsvColumnsHelpDemand.Rewriting:
+        return alpha(theme.palette.primary.main, 0.02);
+    }
+  };
+
+  const getDemandText = (demand: `${CsvColumnsHelpDemand}`) => {
+    switch (demand) {
+      case CsvColumnsHelpDemand.Required:
+        return 'Povinné';
+      case CsvColumnsHelpDemand.Unrequired:
+        return 'Nepovinné';
+      case CsvColumnsHelpDemand.Rewriting:
+        return 'Vlastní*';
+    }
+  };
 
   return (
     <>
@@ -35,18 +59,18 @@ export const CsvHelp = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.entries(columns).map(([column, { required, values, description }]) => (
+            {Object.entries(columns).map(([column, { demand, values, description }]) => (
               <TableRow
                 key={column}
                 sx={(theme) => ({
                   '&:last-child td, &:last-child th': { border: 0 },
-                  backgroundColor: required ? alpha(theme.palette.primary.main, 0.05) : undefined,
+                  backgroundColor: getDemandBackground(demand, theme),
                 })}
               >
                 <TableCell component="td" scope="row">
                   {CSV_COLUMNS_OPTIONS[column as keyof CsvColumnsOptions].colName}
                 </TableCell>
-                <TableCell>{required ? 'Ano' : 'Ne'}</TableCell>
+                <TableCell>{getDemandText(demand)}</TableCell>
                 <TableCell component="td" scope="row">
                   <code>{values.join(', ')}</code>
                 </TableCell>
@@ -58,6 +82,11 @@ export const CsvHelp = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Typography my={4}>
+        * Tyto sloupce vyplňte pouze v případě, že hru nelze dohledat v BGG. Hra, která má vyplněný aspoň 1 z těchto
+        sloupců, bude označena jako <i>úspěšně načtená</i> a nebude se již dohledávat na BGG.
+      </Typography>
     </>
   );
 };

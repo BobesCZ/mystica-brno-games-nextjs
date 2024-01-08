@@ -45,4 +45,24 @@ export const CSV_COLUMNS_OPTIONS: CsvColumnsOptions = {
     enabled: true,
     colName: 'Umístění',
   },
+  yearpublished: {
+    enabled: true,
+    colName: 'Rok vydání',
+  },
+  image: {
+    enabled: true,
+    colName: 'Obrázek',
+  },
+  playingtime: {
+    enabled: true,
+    colName: 'Herní doba',
+  },
+  minplayers: {
+    enabled: true,
+    colName: 'Počet hráčů od',
+  },
+  maxplayers: {
+    enabled: true,
+    colName: 'Počet hráčů do',
+  },
 };

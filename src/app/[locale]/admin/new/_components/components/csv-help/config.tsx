@@ -1,11 +1,11 @@
 import { CSV_COLUMNS_OPTIONS } from '@/app/[locale]/admin/_components/config';
-import { CsvColumnsHelps } from './types';
+import { CsvColumnsHelpDemand, CsvColumnsHelps } from './types';
 import { VALID_LANGS } from '@/csvParser/config';
 import { Lang } from '@/types';
 
 export const CSV_COLUMNS_HELPS: CsvColumnsHelps = {
   type: {
-    required: true,
+    demand: CsvColumnsHelpDemand.Required,
     values: [CSV_COLUMNS_OPTIONS.type.typeGame, '[prázdné]'],
     description: (
       <>
@@ -15,18 +15,18 @@ export const CSV_COLUMNS_HELPS: CsvColumnsHelps = {
     ),
   },
   name: {
-    required: true,
+    demand: CsvColumnsHelpDemand.Required,
     values: ['[text]'],
     description:
       'Název, podle kterého se hra hledá na BGG. Neměl by obsahovat žádné jiné informace (edice, jazyky apod.)',
   },
   id: {
-    required: false,
+    demand: CsvColumnsHelpDemand.Unrequired,
     values: ['[text]'],
     description: 'ID hry na BGG (lze získat z URL)',
   },
   langs: {
-    required: false,
+    demand: CsvColumnsHelpDemand.Unrequired,
     values: VALID_LANGS.map((lang) => (lang === Lang.Irrelevant ? CSV_COLUMNS_OPTIONS.langs.langIrrelevant : lang)),
     description: (
       <>
@@ -38,8 +38,33 @@ export const CSV_COLUMNS_HELPS: CsvColumnsHelps = {
     ),
   },
   location: {
-    required: false,
+    demand: CsvColumnsHelpDemand.Unrequired,
     values: ['[text]'],
     description: 'Umístění hry v místnosti nebo regálu',
+  },
+  yearpublished: {
+    demand: CsvColumnsHelpDemand.Rewriting,
+    values: ['[text]'],
+    description: 'Rok vydání hry',
+  },
+  image: {
+    demand: CsvColumnsHelpDemand.Rewriting,
+    values: ['[text]'],
+    description: 'URL adresa obrázku',
+  },
+  playingtime: {
+    demand: CsvColumnsHelpDemand.Rewriting,
+    values: ['[text]'],
+    description: 'Herní doba (v minutách)',
+  },
+  minplayers: {
+    demand: CsvColumnsHelpDemand.Rewriting,
+    values: ['[text]'],
+    description: 'Minimální počet hráčů',
+  },
+  maxplayers: {
+    demand: CsvColumnsHelpDemand.Rewriting,
+    values: ['[text]'],
+    description: 'Maximální počet hráčů',
   },
 };

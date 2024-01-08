@@ -14,13 +14,17 @@ export const CsvPreviewColumn = ({ column, columnOption, game }: Props) => {
 
   return (
     <>
-      {Array.isArray(value)
-        ? value.map((item, index) => (
-            <Typography key={index} variant="body2" gutterBottom>
-              {item}
-            </Typography>
-          ))
-        : value}
+      {Array.isArray(value) ? (
+        value.map((item, index) => (
+          <Typography key={index} variant="body2" gutterBottom noWrap>
+            {item}
+          </Typography>
+        ))
+      ) : (
+        <Typography variant="body2" gutterBottom noWrap title={value?.toString()}>
+          {value}
+        </Typography>
+      )}
     </>
   );
 };

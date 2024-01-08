@@ -11,6 +11,8 @@ type Props = {
 
 export const CsvPreview = ({ gameList }: Props) => {
   const columns = pickBy(CSV_COLUMNS_OPTIONS, (column) => (column as CsvColumnOption<true>)?.enabled === true);
+  const cellSx = { width: 150, minWidth: 150, maxWidth: 150 };
+  const largeCellSx = { width: 250, minWidth: 250, maxWidth: 250 };
 
   return (
     <>
@@ -24,20 +26,22 @@ export const CsvPreview = ({ gameList }: Props) => {
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell>{CSV_COLUMNS_OPTIONS.name.colName}</TableCell>
+              <TableCell sx={largeCellSx}>{CSV_COLUMNS_OPTIONS.name.colName}</TableCell>
               {Object.entries(columns).map(([column, { colName }]) => (
-                <TableCell key={column}>{column === 'type' ? 'Poznámky (rozšíření)' : colName}</TableCell>
+                <TableCell key={column} sx={column === 'type' ? largeCellSx : cellSx}>
+                  {column === 'type' ? 'Poznámky (rozšíření)' : colName}
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
             {gameList.map((game) => (
               <TableRow key={game.uid} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="td" scope="row">
+                <TableCell component="td" scope="row" sx={largeCellSx}>
                   {game.sourceName}
                 </TableCell>
                 {Object.entries(columns).map(([column, columnOption]) => (
-                  <TableCell key={column} component="td" scope="row">
+                  <TableCell key={column} component="td" scope="row" sx={cellSx}>
                     <CsvPreviewColumn column={column} columnOption={columnOption} game={game} />
                   </TableCell>
                 ))}

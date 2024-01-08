@@ -23,4 +23,10 @@ export type CsvColumnsOptions = {
   id: CsvColumnOption;
   langs: CsvColumnLangsOption;
   location: CsvColumnOption;
+
+  yearpublished: CsvColumnOption;
+  image: CsvColumnOption;
+  playingtime: CsvColumnOption;
+  minplayers: CsvColumnOption;
+  maxplayers: CsvColumnOption;
 };
