@@ -23,6 +23,7 @@ export type CsvColumnsOptions = {
   id: CsvColumnOption;
   langs: CsvColumnLangsOption;
   location: CsvColumnOption;
+  added: CsvColumnOption;
 
   yearpublished: CsvColumnOption;
   image: CsvColumnOption;

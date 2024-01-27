@@ -1,11 +1,12 @@
 'use server';
 
-import { Game, Status } from '@/types';
+import { Game } from '@/types';
 import { kv } from '@vercel/kv';
 import { revalidatePath, revalidateTag, unstable_cache } from 'next/cache';
-import { CacheTags, GameListRecord, GameListRecordStatus } from './types';
+import { CacheTags, GameListRecord } from './types';
 import { GAMELIST_RECORDS_KEY } from './config';
 import { Urls } from '@/config';
+import { geteGameListRecordStatus } from './utils';
 
 const getGameListRecordsPromise = async (): Promise<GameListRecord[]> => await kv.zrange(GAMELIST_RECORDS_KEY, 0, -1);
 
@@ -22,11 +23,12 @@ export const deleteGameListRecords = async () => {
 
 export const createGameListRecord = async (gameList: Game[], recordName: string): Promise<{ recordId: number }> => {
   const recordId = Date.now();
+  const status = geteGameListRecordStatus(gameList);
 
   const gameListRecord: GameListRecord = {
     recordId,
     recordName,
-    status: GameListRecordStatus.INCOMPLETED,
+    status,
     gameList,
   };
 
@@ -39,8 +41,7 @@ export const createGameListRecord = async (gameList: Game[], recordName: string)
 };
 
 export const updateGameListRecord = async (record: GameListRecord, gameList: Game[]) => {
-  const isCompleted = !gameList.find(({ status }) => status === Status.NEW);
-  const status = isCompleted ? GameListRecordStatus.COMPLETED : GameListRecordStatus.INCOMPLETED;
+  const status = geteGameListRecordStatus(gameList);
 
   const gameListRecord: GameListRecord = {
     ...record,

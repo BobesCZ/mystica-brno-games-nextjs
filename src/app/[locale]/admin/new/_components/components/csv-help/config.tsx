@@ -20,11 +20,6 @@ export const CSV_COLUMNS_HELPS: CsvColumnsHelps = {
     description:
       'Název, podle kterého se hra hledá na BGG. Neměl by obsahovat žádné jiné informace (edice, jazyky apod.)',
   },
-  id: {
-    demand: CsvColumnsHelpDemand.Unrequired,
-    values: ['[text]'],
-    description: 'ID hry na BGG (lze získat z URL)',
-  },
   langs: {
     demand: CsvColumnsHelpDemand.Unrequired,
     values: VALID_LANGS.map((lang) => (lang === Lang.Irrelevant ? CSV_COLUMNS_OPTIONS.langs.langIrrelevant : lang)),
@@ -41,6 +36,16 @@ export const CSV_COLUMNS_HELPS: CsvColumnsHelps = {
     demand: CsvColumnsHelpDemand.Unrequired,
     values: ['[text]'],
     description: 'Umístění hry v místnosti nebo regálu',
+  },
+  added: {
+    demand: CsvColumnsHelpDemand.Unrequired,
+    values: ['[text]'],
+    description: 'Datum přidání hry do seznamu (rozhodující je jen měsíc a rok)',
+  },
+  id: {
+    demand: CsvColumnsHelpDemand.Unrequired,
+    values: ['[text]'],
+    description: 'ID hry na BGG (lze získat z URL)',
   },
   yearpublished: {
     demand: CsvColumnsHelpDemand.Rewriting,

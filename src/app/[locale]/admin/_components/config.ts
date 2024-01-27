@@ -45,6 +45,10 @@ export const CSV_COLUMNS_OPTIONS: CsvColumnsOptions = {
     enabled: true,
     colName: 'Umístění',
   },
+  added: {
+    enabled: true,
+    colName: 'Datum přidání',
+  },
   yearpublished: {
     enabled: true,
     colName: 'Rok vydání',

@@ -7,7 +7,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Theme,
   Typography,
   alpha,
 } from '@mui/material';
@@ -22,14 +21,24 @@ export const CsvHelp = () => {
     (_, column) => (CSV_COLUMNS_OPTIONS[column as keyof CsvColumnsOptions] as CsvColumnOption<true>)?.enabled !== false,
   );
 
-  const getDemandBackground = (demand: `${CsvColumnsHelpDemand}`, theme: Theme) => {
-    switch (demand) {
-      case CsvColumnsHelpDemand.Required:
-        return alpha(theme.palette.primary.main, 0.05);
-      case CsvColumnsHelpDemand.Unrequired:
-        return undefined;
-      case CsvColumnsHelpDemand.Rewriting:
-        return alpha(theme.palette.primary.main, 0.02);
+  const getRowBackground = (column: keyof CsvColumnsOptions) => {
+    switch (column) {
+      case 'type':
+      case 'name':
+      case 'langs':
+      case 'location':
+      case 'added':
+        return '#cfe7f5';
+
+      case 'id':
+        return '#e6e6ff';
+
+      case 'yearpublished':
+      case 'image':
+      case 'playingtime':
+      case 'minplayers':
+      case 'maxplayers':
+        return '#ccffcc';
     }
   };
 
@@ -64,7 +73,7 @@ export const CsvHelp = () => {
                 key={column}
                 sx={(theme) => ({
                   '&:last-child td, &:last-child th': { border: 0 },
-                  backgroundColor: getDemandBackground(demand, theme),
+                  backgroundColor: alpha(getRowBackground(column as keyof CsvColumnsOptions), 0.5),
                 })}
               >
                 <TableCell component="td" scope="row">

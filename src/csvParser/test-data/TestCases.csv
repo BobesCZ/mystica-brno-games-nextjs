@@ -1,8 +1,9 @@
-Název hry,BGG ID,Jazyky,Umístění,Rok vydání,Obrázek,Herní doba,Počet hráčů od,Počet hráčů do
-Game,,,,,,,,
-Game with BGG ID,311659,,,,,,,
-Game with langs,,"CZ, ENG",,,,,,
-Game with location,,,A1,,,,,
-Game with BGG ID and langs,54998,"CZ, ENG, nerozhoduje",B2,,,,,
-Game with custom data,,,,2021,https://eshop.albi.cz/data/cache/thumb_550-550-12/products/24098/82c624d4d15916a5bc91b99d0a31419e/84878.jpg?s=ebf659f0fcf0497db86e761305bc93fd,20,2,4
-Game with BGG ID and custom data,54998,"CZ, ENG, nerozhoduje",B2,1900,https://www.zatrolene-hry.cz/galerie/965/main.large.jpg?cc8e12cb775954fb9d92604dc38b46aa,91,10,11
+Název hry,Jazyky,Umístění,Datum přidání,BGG ID,Rok vydání,Obrázek,Herní doba,Počet hráčů od,Počet hráčů do
+Game,,,,,,,,,
+Game with BGG ID,,,,311659,,,,,
+Game with langs,"CZ, ENG",,,,,,,,
+Game with location,,A1,,,,,,,
+Game with added,,,1.1.2024,,,,,,
+Game with BGG ID and langs,"CZ, ENG, nerozhoduje",B2,1.1.2024,54998,,,,,
+Game with custom data,,,,,2021,https://eshop.albi.cz/data/cache/thumb_550-550-12/products/24098/82c624d4d15916a5bc91b99d0a31419e/84878.jpg?s=ebf659f0fcf0497db86e761305bc93fd,20,2,4
+Game with BGG ID and custom data,"CZ, ENG, nerozhoduje",B2,1.1.2024,54998,1900,https://www.zatrolene-hry.cz/galerie/965/main.large.jpg?cc8e12cb775954fb9d92604dc38b46aa,91,10,11

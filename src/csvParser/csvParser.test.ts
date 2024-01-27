@@ -25,6 +25,10 @@ const OPTIONS_ALL_ENABLED: CsvColumnsOptions = {
     enabled: true,
     colName: 'Umístění',
   },
+  added: {
+    enabled: true,
+    colName: 'Datum přidání',
+  },
   yearpublished: {
     enabled: true,
     colName: 'Rok vydání',
@@ -61,6 +65,10 @@ const OPTIONS_ALL_DISABLED: CsvColumnsOptions = {
   location: {
     enabled: false,
     colName: 'Umístění',
+  },
+  added: {
+    enabled: false,
+    colName: 'Datum přidání',
   },
   yearpublished: {
     enabled: false,
@@ -103,12 +111,13 @@ const OPTIONS_WITH_TYPE_GAME_ALL_DISABLED: CsvColumnsOptions = {
 };
 
 describe('Parsing CsvGame[] data to Game[]', () => {
-  it('Config: TypeGame disabled, all ENABLED', () => {
+  it('Config: TypeGame disabled, standards ENABLED', () => {
     const [
       game,
       gameWithBggId,
       gameWithLangs,
       gameWithLocation,
+      gameWithAdded,
       gameWithAll,
       gameWithCustomData,
       gameWithAllAndCustomData,
@@ -116,43 +125,56 @@ describe('Parsing CsvGame[] data to Game[]', () => {
 
     // Game
     expect(game.sourceName).toEqual('Game');
-    expect(game.notes).toBeUndefined;
-    expect(game.id).toBeUndefined;
+    expect(game.notes).toBeUndefined();
+    expect(game.id).toBeUndefined();
     expect(game.langs?.length).toEqual(0);
-    expect(game.location).toBeUndefined;
+    expect(game.location).toBeUndefined();
+    expect(game.added).toBeUndefined();
 
     // Game with BGG ID
     expect(gameWithBggId.sourceName).toEqual('Game with BGG ID');
-    expect(gameWithBggId.notes).toBeUndefined;
+    expect(gameWithBggId.notes).toBeUndefined();
     expect(gameWithBggId.id).toEqual(311659);
     expect(gameWithBggId.langs?.length).toEqual(0);
-    expect(gameWithBggId.location).toBeUndefined;
+    expect(gameWithBggId.location).toBeUndefined();
+    expect(gameWithBggId.added).toBeUndefined();
 
     // Game with langs
     expect(gameWithLangs.sourceName).toEqual('Game with langs');
-    expect(gameWithLangs.notes).toBeUndefined;
-    expect(gameWithLangs.id).toBeUndefined;
+    expect(gameWithLangs.notes).toBeUndefined();
+    expect(gameWithLangs.id).toBeUndefined();
     expect(gameWithLangs.langs?.length).toEqual(2);
     expect(gameWithLangs.langs?.[0]).toEqual('CZ');
     expect(gameWithLangs.langs?.[1]).toEqual('ENG');
-    expect(gameWithLangs.location).toBeUndefined;
+    expect(gameWithLangs.location).toBeUndefined();
+    expect(gameWithLangs.added).toBeUndefined();
 
     // Game with location
     expect(gameWithLocation.sourceName).toEqual('Game with location');
-    expect(gameWithLocation.notes).toBeUndefined;
-    expect(gameWithLocation.id).toBeUndefined;
+    expect(gameWithLocation.notes).toBeUndefined();
+    expect(gameWithLocation.id).toBeUndefined();
     expect(gameWithLocation.langs?.length).toEqual(0);
     expect(gameWithLocation.location).toEqual('A1');
+    expect(gameWithLocation.added).toBeUndefined();
+
+    // Game with added
+    expect(gameWithAdded.sourceName).toEqual('Game with added');
+    expect(gameWithAdded.notes).toBeUndefined();
+    expect(gameWithAdded.id).toBeUndefined();
+    expect(gameWithAdded.langs?.length).toEqual(0);
+    expect(gameWithAdded.location).toBeUndefined();
+    expect(gameWithAdded.added).toEqual('1.1.2024');
 
     // Game with all features
     expect(gameWithAll.sourceName).toEqual('Game with BGG ID and langs');
-    expect(gameWithAll.notes).toBeUndefined;
+    expect(gameWithAll.notes).toBeUndefined();
     expect(gameWithAll.id).toEqual(54998);
     expect(gameWithAll.langs?.length).toEqual(3);
     expect(gameWithAll.langs?.[0]).toEqual('CZ');
     expect(gameWithAll.langs?.[1]).toEqual('ENG');
     expect(gameWithAll.langs?.[2]).toEqual('Irrelevant');
     expect(gameWithAll.location).toEqual('B2');
+    expect(gameWithAll.added).toEqual('1.1.2024');
     expect(gameWithAll.status).toEqual('new');
 
     // Game with custom data
@@ -168,13 +190,14 @@ describe('Parsing CsvGame[] data to Game[]', () => {
 
     // Game with all features and custom data
     expect(gameWithAllAndCustomData.sourceName).toEqual('Game with BGG ID and custom data');
-    expect(gameWithAllAndCustomData.notes).toBeUndefined;
+    expect(gameWithAllAndCustomData.notes).toBeUndefined();
     expect(gameWithAllAndCustomData.id).toEqual(54998);
     expect(gameWithAllAndCustomData.langs?.length).toEqual(3);
     expect(gameWithAllAndCustomData.langs?.[0]).toEqual('CZ');
     expect(gameWithAllAndCustomData.langs?.[1]).toEqual('ENG');
     expect(gameWithAllAndCustomData.langs?.[2]).toEqual('Irrelevant');
     expect(gameWithAllAndCustomData.location).toEqual('B2');
+    expect(gameWithAllAndCustomData.added).toEqual('1.1.2024');
     expect(gameWithAllAndCustomData.yearpublished).toEqual(1900);
     expect(gameWithAllAndCustomData.image).toEqual(
       'https://www.zatrolene-hry.cz/galerie/965/main.large.jpg?cc8e12cb775954fb9d92604dc38b46aa',
@@ -185,12 +208,13 @@ describe('Parsing CsvGame[] data to Game[]', () => {
     expect(gameWithAllAndCustomData.status).toEqual('finished');
   });
 
-  it('Config: TypeGame disabled, id disabled, langs disabled, location disabled, all custom disabled', () => {
+  it('Config: TypeGame disabled, standards disabled, customs disabled', () => {
     const [
       game,
       gameWithBggId,
       gameWithLangs,
       gameWithLocation,
+      gameWithAdded,
       gameWithAll,
       gameWithCustomData,
       gameWithAllAndCustomData,
@@ -198,70 +222,85 @@ describe('Parsing CsvGame[] data to Game[]', () => {
 
     // Game
     expect(game.sourceName).toEqual('Game');
-    expect(game.notes).toBeUndefined;
-    expect(game.id).toBeUndefined;
+    expect(game.notes).toBeUndefined();
+    expect(game.id).toBeUndefined();
     expect(game.langs?.length).toEqual(0);
-    expect(game.location).toBeUndefined;
+    expect(game.location).toBeUndefined();
+    expect(game.added).toBeUndefined();
 
     // Game with BGG ID
     expect(gameWithBggId.sourceName).toEqual('Game with BGG ID');
-    expect(gameWithBggId.notes).toBeUndefined;
-    expect(gameWithBggId.id).toBeUndefined;
+    expect(gameWithBggId.notes).toBeUndefined();
+    expect(gameWithBggId.id).toBeUndefined();
     expect(gameWithBggId.langs?.length).toEqual(0);
-    expect(gameWithBggId.location).toBeUndefined;
+    expect(gameWithBggId.location).toBeUndefined();
+    expect(gameWithBggId.added).toBeUndefined();
 
     // Game with langs
     expect(gameWithLangs.sourceName).toEqual('Game with langs');
-    expect(gameWithLangs.notes).toBeUndefined;
-    expect(gameWithLangs.id).toBeUndefined;
+    expect(gameWithLangs.notes).toBeUndefined();
+    expect(gameWithLangs.id).toBeUndefined();
     expect(gameWithLangs.langs?.length).toEqual(0);
-    expect(gameWithLangs.location).toBeUndefined;
+    expect(gameWithLangs.location).toBeUndefined();
+    expect(gameWithLangs.added).toBeUndefined();
 
     // Game with location
     expect(gameWithLocation.sourceName).toEqual('Game with location');
-    expect(gameWithLocation.notes).toBeUndefined;
-    expect(gameWithLocation.id).toBeUndefined;
+    expect(gameWithLocation.notes).toBeUndefined();
+    expect(gameWithLocation.id).toBeUndefined();
     expect(gameWithLocation.langs?.length).toEqual(0);
-    expect(gameWithLocation.location).toBeUndefined;
+    expect(gameWithLocation.location).toBeUndefined();
+    expect(gameWithLocation.added).toBeUndefined();
+
+    // Game with added
+    expect(gameWithAdded.sourceName).toEqual('Game with added');
+    expect(gameWithAdded.notes).toBeUndefined();
+    expect(gameWithAdded.id).toBeUndefined();
+    expect(gameWithAdded.langs?.length).toEqual(0);
+    expect(gameWithAdded.location).toBeUndefined();
+    expect(gameWithAdded.added).toBeUndefined();
 
     // Game with all features
     expect(gameWithAll.sourceName).toEqual('Game with BGG ID and langs');
-    expect(gameWithAll.notes).toBeUndefined;
-    expect(gameWithAll.id).toBeUndefined;
+    expect(gameWithAll.notes).toBeUndefined();
+    expect(gameWithAll.id).toBeUndefined();
     expect(gameWithAll.langs?.length).toEqual(0);
-    expect(gameWithAll.location).toBeUndefined;
+    expect(gameWithAll.location).toBeUndefined();
+    expect(gameWithAll.added).toBeUndefined();
     expect(gameWithAll.status).toEqual('new');
 
     // Game with custom data
     expect(gameWithCustomData.sourceName).toEqual('Game with custom data');
-    expect(gameWithCustomData.yearpublished).toBeUndefined;
-    expect(gameWithCustomData.image).toBeUndefined;
-    expect(gameWithCustomData.playingtime).toBeUndefined;
-    expect(gameWithCustomData.minplayers).toBeUndefined;
-    expect(gameWithCustomData.maxplayers).toBeUndefined;
+    expect(gameWithCustomData.yearpublished).toBeUndefined();
+    expect(gameWithCustomData.image).toBeUndefined();
+    expect(gameWithCustomData.playingtime).toBeUndefined();
+    expect(gameWithCustomData.minplayers).toBeUndefined();
+    expect(gameWithCustomData.maxplayers).toBeUndefined();
     expect(gameWithCustomData.status).toEqual('new');
 
     // Game with all features and custom data
     expect(gameWithAllAndCustomData.sourceName).toEqual('Game with BGG ID and custom data');
-    expect(gameWithAllAndCustomData.notes).toBeUndefined;
-    expect(gameWithAllAndCustomData.id).toBeUndefined;
+    expect(gameWithAllAndCustomData.notes).toBeUndefined();
+    expect(gameWithAllAndCustomData.id).toBeUndefined();
     expect(gameWithAllAndCustomData.langs?.length).toEqual(0);
-    expect(gameWithAllAndCustomData.location).toBeUndefined;
-    expect(gameWithAllAndCustomData.yearpublished).toBeUndefined;
-    expect(gameWithAllAndCustomData.image).toBeUndefined;
-    expect(gameWithAllAndCustomData.playingtime).toBeUndefined;
-    expect(gameWithAllAndCustomData.minplayers).toBeUndefined;
-    expect(gameWithAllAndCustomData.maxplayers).toBeUndefined;
-    expect(gameWithCustomData.status).toEqual('new');
+    expect(gameWithAllAndCustomData.location).toBeUndefined();
+    expect(gameWithAllAndCustomData.added).toBeUndefined();
+    expect(gameWithAllAndCustomData.yearpublished).toBeUndefined();
+    expect(gameWithAllAndCustomData.image).toBeUndefined();
+    expect(gameWithAllAndCustomData.playingtime).toBeUndefined();
+    expect(gameWithAllAndCustomData.minplayers).toBeUndefined();
+    expect(gameWithAllAndCustomData.maxplayers).toBeUndefined();
+    expect(gameWithAllAndCustomData.status).toEqual('new');
   });
 
-  it('Config: TypeGame ENABLED, all ENABLED', () => {
+  it('Config: TypeGame ENABLED, standards ENABLED', () => {
     const [
       game,
       gameWithNotes,
       gameWithBggId,
       gameWithLangs,
       gameWithLocation,
+      gameWithAdded,
       gameWithAll,
       gameWithCustomData,
       gameWithAllAndCustomData,
@@ -270,41 +309,54 @@ describe('Parsing CsvGame[] data to Game[]', () => {
     // Game
     expect(game.sourceName).toEqual('Game');
     expect(game.notes?.length).toEqual(0);
-    expect(game.id).toBeUndefined;
+    expect(game.id).toBeUndefined();
     expect(game.langs?.length).toEqual(0);
-    expect(game.location).toBeUndefined;
+    expect(game.location).toBeUndefined();
+    expect(game.added).toBeUndefined();
 
     // Game with notes
     expect(gameWithNotes.sourceName).toEqual('Game with 2 notes');
     expect(gameWithNotes.notes?.length).toEqual(2);
     expect(gameWithNotes.notes?.[0]).toEqual('Note 1');
     expect(gameWithNotes.notes?.[1]).toEqual('Note 2');
-    expect(gameWithNotes.id).toBeUndefined;
+    expect(gameWithNotes.id).toBeUndefined();
     expect(gameWithNotes.langs?.length).toEqual(0);
-    expect(gameWithNotes.location).toBeUndefined;
+    expect(gameWithNotes.location).toBeUndefined();
+    expect(gameWithNotes.added).toBeUndefined();
 
     // Game with BGG ID
     expect(gameWithBggId.sourceName).toEqual('Game with BGG ID');
     expect(gameWithBggId.notes?.length).toEqual(0);
     expect(gameWithBggId.id).toEqual(311659);
     expect(gameWithBggId.langs?.length).toEqual(0);
-    expect(gameWithBggId.location).toBeUndefined;
+    expect(gameWithBggId.location).toBeUndefined();
+    expect(gameWithBggId.added).toBeUndefined();
 
     // Game with langs
     expect(gameWithLangs.sourceName).toEqual('Game with langs');
     expect(gameWithLangs.notes?.length).toEqual(0);
-    expect(gameWithLangs.id).toBeUndefined;
+    expect(gameWithLangs.id).toBeUndefined();
     expect(gameWithLangs.langs?.length).toEqual(2);
     expect(gameWithLangs.langs?.[0]).toEqual('CZ');
     expect(gameWithLangs.langs?.[1]).toEqual('ENG');
-    expect(gameWithLangs.location).toBeUndefined;
+    expect(gameWithLangs.location).toBeUndefined();
+    expect(gameWithLangs.added).toBeUndefined();
 
     // Game with location
     expect(gameWithLocation.sourceName).toEqual('Game with location');
-    expect(gameWithLocation.notes).toBeUndefined;
-    expect(gameWithLocation.id).toBeUndefined;
+    expect(gameWithLocation.notes?.length).toEqual(0);
+    expect(gameWithLocation.id).toBeUndefined();
     expect(gameWithLocation.langs?.length).toEqual(0);
     expect(gameWithLocation.location).toEqual('A1');
+    expect(gameWithLocation.added).toBeUndefined();
+
+    // Game with added
+    expect(gameWithAdded.sourceName).toEqual('Game with added');
+    expect(gameWithAdded.notes?.length).toEqual(0);
+    expect(gameWithAdded.id).toBeUndefined();
+    expect(gameWithAdded.langs?.length).toEqual(0);
+    expect(gameWithAdded.location).toBeUndefined();
+    expect(gameWithAdded.added).toEqual('1.1.2024');
 
     // Game with all features
     expect(gameWithAll.sourceName).toEqual('Game with note, BGG ID and langs');
@@ -316,6 +368,7 @@ describe('Parsing CsvGame[] data to Game[]', () => {
     expect(gameWithAll.langs?.[1]).toEqual('ENG');
     expect(gameWithAll.langs?.[2]).toEqual('Irrelevant');
     expect(gameWithAll.location).toEqual('B2');
+    expect(gameWithAll.added).toEqual('1.1.2024');
     expect(gameWithAll.status).toEqual('new');
 
     // Game with custom data
@@ -339,6 +392,7 @@ describe('Parsing CsvGame[] data to Game[]', () => {
     expect(gameWithAllAndCustomData.langs?.[1]).toEqual('ENG');
     expect(gameWithAllAndCustomData.langs?.[2]).toEqual('Irrelevant');
     expect(gameWithAllAndCustomData.location).toEqual('B2');
+    expect(gameWithAllAndCustomData.added).toEqual('1.1.2024');
     expect(gameWithAllAndCustomData.yearpublished).toEqual(1900);
     expect(gameWithAllAndCustomData.image).toEqual(
       'https://www.zatrolene-hry.cz/galerie/965/main.large.jpg?cc8e12cb775954fb9d92604dc38b46aa',
@@ -346,16 +400,17 @@ describe('Parsing CsvGame[] data to Game[]', () => {
     expect(gameWithAllAndCustomData.playingtime).toEqual(91);
     expect(gameWithAllAndCustomData.minplayers).toEqual(10);
     expect(gameWithAllAndCustomData.maxplayers).toEqual(11);
-    expect(gameWithCustomData.status).toEqual('finished');
+    expect(gameWithAllAndCustomData.status).toEqual('finished');
   });
 
-  it('Config: TypeGame ENABLED, id disabled, langs disabled, location disabled, all custom disabled', () => {
+  it('Config: TypeGame ENABLED, standards disabled, customs disabled', () => {
     const [
       game,
       gameWithNotes,
       gameWithBggId,
       gameWithLangs,
       gameWithLocation,
+      gameWithAdded,
       gameWithAll,
       gameWithCustomData,
       gameWithAllAndCustomData,
@@ -364,70 +419,86 @@ describe('Parsing CsvGame[] data to Game[]', () => {
     // Game
     expect(game.sourceName).toEqual('Game');
     expect(game.notes?.length).toEqual(0);
-    expect(game.id).toBeUndefined;
+    expect(game.id).toBeUndefined();
     expect(game.langs?.length).toEqual(0);
-    expect(game.location).toBeUndefined;
+    expect(game.location).toBeUndefined();
+    expect(game.added).toBeUndefined();
 
     // Game with notes
     expect(gameWithNotes.sourceName).toEqual('Game with 2 notes');
     expect(gameWithNotes.notes?.length).toEqual(2);
     expect(gameWithNotes.notes?.[0]).toEqual('Note 1');
     expect(gameWithNotes.notes?.[1]).toEqual('Note 2');
-    expect(gameWithNotes.id).toBeUndefined;
+    expect(gameWithNotes.id).toBeUndefined();
     expect(gameWithNotes.langs?.length).toEqual(0);
-    expect(gameWithNotes.location).toBeUndefined;
+    expect(gameWithNotes.location).toBeUndefined();
+    expect(gameWithNotes.added).toBeUndefined();
 
     // Game with BGG ID
     expect(gameWithBggId.sourceName).toEqual('Game with BGG ID');
     expect(gameWithBggId.notes?.length).toEqual(0);
-    expect(gameWithBggId.id).toBeUndefined;
+    expect(gameWithBggId.id).toBeUndefined();
     expect(gameWithBggId.langs?.length).toEqual(0);
-    expect(gameWithBggId.location).toBeUndefined;
+    expect(gameWithBggId.location).toBeUndefined();
+    expect(gameWithBggId.added).toBeUndefined();
 
     // Game with langs
     expect(gameWithLangs.sourceName).toEqual('Game with langs');
     expect(gameWithLangs.notes?.length).toEqual(0);
-    expect(gameWithLangs.id).toBeUndefined;
+    expect(gameWithLangs.id).toBeUndefined();
     expect(gameWithLangs.langs?.length).toEqual(0);
-    expect(gameWithLangs.location).toBeUndefined;
+    expect(gameWithLangs.location).toBeUndefined();
+    expect(gameWithLangs.added).toBeUndefined();
 
     // Game with location
     expect(gameWithLocation.sourceName).toEqual('Game with location');
-    expect(gameWithLocation.notes).toBeUndefined;
-    expect(gameWithLocation.id).toBeUndefined;
+    expect(gameWithLocation.notes?.length).toEqual(0);
+    expect(gameWithLocation.id).toBeUndefined();
     expect(gameWithLocation.langs?.length).toEqual(0);
-    expect(gameWithLocation.location).toBeUndefined;
+    expect(gameWithLocation.location).toBeUndefined();
+    expect(gameWithLocation.added).toBeUndefined();
+
+    // Game with added
+    expect(gameWithAdded.sourceName).toEqual('Game with added');
+    expect(gameWithAdded.notes?.length).toEqual(0);
+    expect(gameWithAdded.id).toBeUndefined();
+    expect(gameWithAdded.langs?.length).toEqual(0);
+    expect(gameWithAdded.location).toBeUndefined();
+    expect(gameWithAdded.added).toBeUndefined();
 
     // Game with all features
     expect(gameWithAll.sourceName).toEqual('Game with note, BGG ID and langs');
     expect(gameWithAll.notes?.length).toEqual(1);
     expect(gameWithAll.notes?.[0]).toEqual('Note');
-    expect(gameWithAll.id).toBeUndefined;
+    expect(gameWithAll.id).toBeUndefined();
     expect(gameWithAll.langs?.length).toEqual(0);
-    expect(gameWithAll.location).toBeUndefined;
+    expect(gameWithAll.location).toBeUndefined();
+    expect(gameWithAll.added).toBeUndefined();
     expect(gameWithAll.status).toEqual('new');
 
     // Game with custom data
     expect(gameWithCustomData.sourceName).toEqual('Game with custom data');
-    expect(gameWithCustomData.yearpublished).toBeUndefined;
-    expect(gameWithCustomData.image).toBeUndefined;
-    expect(gameWithCustomData.playingtime).toBeUndefined;
-    expect(gameWithCustomData.minplayers).toBeUndefined;
-    expect(gameWithCustomData.maxplayers).toBeUndefined;
+    expect(gameWithCustomData.yearpublished).toBeUndefined();
+    expect(gameWithCustomData.image).toBeUndefined();
+    expect(gameWithCustomData.playingtime).toBeUndefined();
+    expect(gameWithCustomData.minplayers).toBeUndefined();
+    expect(gameWithCustomData.maxplayers).toBeUndefined();
     expect(gameWithCustomData.status).toEqual('new');
 
     // Game with all features and custom data
     expect(gameWithAllAndCustomData.sourceName).toEqual('Game with note, BGG ID and custom data');
-    expect(gameWithAllAndCustomData.notes).toBeUndefined;
-    expect(gameWithAllAndCustomData.id).toBeUndefined;
+    expect(gameWithAllAndCustomData.notes?.length).toEqual(1);
+    expect(gameWithAllAndCustomData.notes?.[0]).toEqual('Note');
+    expect(gameWithAllAndCustomData.id).toBeUndefined();
     expect(gameWithAllAndCustomData.langs?.length).toEqual(0);
-    expect(gameWithAllAndCustomData.location).toBeUndefined;
-    expect(gameWithAllAndCustomData.yearpublished).toBeUndefined;
-    expect(gameWithAllAndCustomData.image).toBeUndefined;
-    expect(gameWithAllAndCustomData.playingtime).toBeUndefined;
-    expect(gameWithAllAndCustomData.minplayers).toBeUndefined;
-    expect(gameWithAllAndCustomData.maxplayers).toBeUndefined;
-    expect(gameWithCustomData.status).toEqual('new');
+    expect(gameWithAllAndCustomData.location).toBeUndefined();
+    expect(gameWithAllAndCustomData.added).toBeUndefined();
+    expect(gameWithAllAndCustomData.yearpublished).toBeUndefined();
+    expect(gameWithAllAndCustomData.image).toBeUndefined();
+    expect(gameWithAllAndCustomData.playingtime).toBeUndefined();
+    expect(gameWithAllAndCustomData.minplayers).toBeUndefined();
+    expect(gameWithAllAndCustomData.maxplayers).toBeUndefined();
+    expect(gameWithAllAndCustomData.status).toEqual('new');
   });
 
   it('Config: TypeGame ENABLED, but missing in data', () => {
@@ -439,6 +510,6 @@ describe('Parsing CsvGame[] data to Game[]', () => {
   it('Config: TypeGame disabled, but data contains notes', () => {
     // Each row (including notes) is parsed as a Game
     const gamelist = getGameListFromCsv(testCasesWithTypeGame, OPTIONS_ALL_ENABLED);
-    expect(gamelist.length).toEqual(12);
+    expect(gamelist.length).toEqual(13);
   });
 });
