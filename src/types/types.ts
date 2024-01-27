@@ -59,6 +59,7 @@ export enum GameOrdering {
   NAME = 'name',
   RATING = 'rating',
   WEIGHT = 'weight',
+  ADDED = 'added',
 }
 
 export enum LogRecordState {

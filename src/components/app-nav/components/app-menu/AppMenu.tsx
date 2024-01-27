@@ -31,6 +31,7 @@ export const AppMenu = () => {
             <MenuLink to={Urls.SEARCH} i18nKey="search.pageTitle" />
             <MenuLink to={Urls.NAME} i18nKey="name.pageTitle" />
             <MenuLink to={Urls.RANK} i18nKey="rank.pageTitle" />
+            <MenuLink to={Urls.ADDED} i18nKey="added.pageTitle" />
 
             <Divider sx={{ my: 1 }} />
 

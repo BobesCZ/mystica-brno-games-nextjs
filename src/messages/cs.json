@@ -115,7 +115,8 @@
         "options": {
           "name": "Abecedně",
           "rating": "Podle hodnocení",
-          "weight": "Podle obtížnosti"
+          "weight": "Podle obtížnosti",
+          "added": "Podle data přidání"
         }
       }
     }
@@ -127,6 +128,9 @@
         "label": "Název hry (český nebo původní)"
       }
     }
+  },
+  "added": {
+    "pageTitle": "Nově přidané hry"
   },
   "bgg": {
     "categories": {

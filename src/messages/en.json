@@ -115,7 +115,8 @@
         "options": {
           "name": "Alphabetical",
           "rating": "By rating",
-          "weight": "By complexity"
+          "weight": "By complexity",
+          "added": "Date added"
         }
       }
     }
@@ -127,6 +128,9 @@
         "label": "Game name (Czech or original)"
       }
     }
+  },
+  "added": {
+    "pageTitle": "Newly added games"
   },
   "bgg": {
     "categories": {

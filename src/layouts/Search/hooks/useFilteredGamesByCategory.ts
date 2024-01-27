@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { filterGamebyCategory, orderGameByRating, orderGameByWeight } from '../utils';
+import { filterGamebyCategory, orderGameByAdded, orderGameByRating, orderGameByWeight } from '../utils';
 import { CategoryFilters, CategoryGroup, MechanicGroup } from '../types';
 import {
   getAutocompleteOptions,
@@ -43,6 +43,10 @@ export const useFilteredGamesByCategory = ({ filters, gameList, locale }: Props)
 
     if (filters.ordering === GameOrdering.WEIGHT) {
       return orderBy(list, orderGameByWeight, 'desc');
+    }
+
+    if (filters.ordering === GameOrdering.ADDED) {
+      return orderBy(list, orderGameByAdded, 'desc');
     }
 
     return orderBy(list, orderGameByRating, 'desc');
